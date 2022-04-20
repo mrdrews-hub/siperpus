@@ -1,6 +1,6 @@
 class BookController {
     /**
-     * public
+     * @public
      */
     static getBook(req,res,next){
         res.send('Get All Book')
