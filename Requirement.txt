@@ -1,0 +1,11 @@
+Requirement Aplikasi : 
+
+Role: root & Admin
+
+root: mampu crud admin & mengakses semua menu admin
+
+crud admin: 
+	-get data admin
+	-tambah admin
+	-edit data admin
+	-delete admin

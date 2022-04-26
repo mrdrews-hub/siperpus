@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../helpers/db')
 
-const Auth = sequelize.define('Auth', {
+const Book = sequelize.define('Book', {
   username: {
     type: DataTypes.STRING,
     allowNull: false
@@ -15,10 +15,10 @@ const Auth = sequelize.define('Auth', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  role: {
-    type: DataTypes.ENUM('root', 'admin'),
-    defaultValue: 'admin'
+  no_hp: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 })
 
-module.exports = Auth
+module.exports = Book
