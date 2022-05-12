@@ -9,3 +9,8 @@ crud admin:
 	-tambah admin
 	-edit data admin
 	-delete admin
+
+crud rak buku
+crud buku
+crud peminjaman buku
+crud pengembalian buku

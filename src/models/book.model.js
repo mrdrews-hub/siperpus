@@ -1,24 +1,27 @@
-const { DataTypes } = require('sequelize')
-const sequelize = require('../helpers/db')
-
-const Book = sequelize.define('Book', {
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  no_hp: {
-    type: DataTypes.STRING,
-    allowNull: false
-  }
-})
-
-module.exports = Book
+module.exports = function (sequelize, DataTypes) {
+  return sequelize.define('Book', {
+    code: {
+      type: DataTypes.STRING(10),
+      unique: true
+    },
+    title: {
+      type: DataTypes.STRING(50),
+      allowNull: false
+    },
+    author: {
+      type: DataTypes.STRING(30)
+    },
+    years: {
+      type: DataTypes.STRING(4)
+    },
+    isbn: {
+      type: DataTypes.STRING
+    },
+    about: {
+      type: DataTypes.TEXT
+    },
+    image: {
+      type: DataTypes.STRING
+    }
+  })
+}
