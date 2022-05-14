@@ -37,10 +37,10 @@ class AuthController {
           username: userExist.username,
           email: userExist.email,
           role: userExist.role
-        }, config.jwt_secret)
-        return res.header('auth-token').json({ msg: 'Login Sukses', token })
+        }, config.jwt_secret, { expiresIn: '60' })
+        res.header('auth-token').json({ msg: 'Login Sukses', token })
       } else {
-        return res.status(401).json({ error: true, msg: 'Password salah' })
+        res.status(401).json({ error: true, msg: 'Password salah' })
       }
     } else {
       res.status(401).json({ error: true, msg: 'Email atau password salah' })

@@ -22,7 +22,8 @@ bookRelation(sequelize, DataTypes)
 
 // Get any model for sync purpose
 const { Rack, Book } = sequelize.models
-Rack.sync({ force: true })
+sequelize.sync()
+// Rack.sync({ force: true })
 module.exports = sequelize
 // const models = {}
 

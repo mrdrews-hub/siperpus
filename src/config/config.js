@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const config = {
-  port: process.env.PORT || 5000,
+  port: process.env.PORT || 3030,
   db: {
     name: process.env.DATABASE,
     username: process.env.DB_USERNAME,
