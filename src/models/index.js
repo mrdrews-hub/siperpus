@@ -12,7 +12,8 @@ const sequelize = new Sequelize(config.db.name, config.db.username, config.db.pa
 const models = [
   require('./auth.model'),
   require('./book.model'),
-  require('./rack.model')
+  require('./rack.model'),
+  require('./categories.model')
 ]
 for (const model of models) {
   model(sequelize, DataTypes)
@@ -22,9 +23,11 @@ bookRelation(sequelize, DataTypes)
 
 // Get any model for sync purpose
 const { Rack, Book } = sequelize.models
-sequelize.sync()
-// Rack.sync({ force: true })
+// sequelize.sync()
+Book.sync({ force: true })
+
 module.exports = sequelize
+
 // const models = {}
 
 // models.Sequelize = Sequelize

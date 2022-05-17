@@ -1,7 +1,8 @@
 const fs = require('fs')
+const path = require('path')
 
 function deleteBookImage (filename) {
-  let urltoimage = process.cwd() + '\\uploads\\'
+  let urltoimage = path.join(__dirname, '../../uploads/')
   if (filename) {
     urltoimage += filename
     fs.rmSync(urltoimage)

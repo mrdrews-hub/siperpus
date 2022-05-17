@@ -1,4 +1,5 @@
 const { models } = require('../../models')
+const { Op } = require('sequelize')
 const deleteBookImage = require('../../helpers/deleteFile')
 
 const BookController = {
@@ -20,10 +21,16 @@ const BookController = {
   },
 
   async getBook (req, res, next) {
-    console.log(process.cwd())
     try {
       const book = await models.Book.findAll({
-        include: models.Rack
+        include: [
+          {
+            model: models.Rack
+          },
+          {
+            model: models.Categories
+          }
+        ]
       })
       // const bookRack = await book.getRack()
       res.status(200).json({ error: false, books: book })
@@ -32,53 +39,75 @@ const BookController = {
     }
   },
 
-  async getImage (req, res, next) {
-    try {
-      let urltoimage = process.cwd() + '\\uploads\\rack\\'
-      if (req.params.image === undefined) {
-        urltoimage += 'diary.png'
-      } else {
-        urltoimage += req.params.image
-      }
-      res.sendFile(urltoimage)
-    } catch (error) {
-      res.status(500).json({ error: true, msg: error.toString() })
-    }
-  },
-
   async createBook (req, res, next) {
-    const filename = req.file === undefined ? '' : req.file.filename
-    const { code, title, author, years, isbn, info, rack } = req.body
-    console.log(req.file)
+    const filename = req.file ? req.file.filename : ''
     try {
-      const Rack = await models.Rack.findOne({
-        where: { rack }
+      const isBookExist = await models.Book.findOne({
+        where: { isbn: req.body.isbn }
       })
-      if (Rack) {
+      // console.log(isBookExist)
+      if (isBookExist) {
+        deleteBookImage(filename)
+        res.json({ error: true, errorPoint: 'isbn', msg: `Buku dengan ISBN ${req.body.isbn} sudah pernah diinputkan`, reference: isBookExist })
+      } else {
+        const { title, author, years, isbn, info, RackId, CategoryId } = req.body
         const body = {
-          code,
           title,
           author,
           years,
           isbn,
           info,
           image: filename,
-          RackId: Rack.id
+          RackId,
+          CategoryId
         }
         const result = await models.Book.create(body)
         res.status(201).json({ error: false, msg: 'Sukses! Buku berhasil dibuat' })
-      } else {
-        deleteBookImage(filename)
-        res.status(400).json({ error: true, msg: `Nama Rack ${rack} tidak ada` })
       }
     } catch (err) {
-      // this.deleteImages(req.file.filename)
-      res.status(500).json({ error: true, msg: err.toString() })
+      deleteBookImage(filename)
+      res.status(200).json({ error: true, msg: err.toString() })
     }
   },
 
   async updateBook (req, res, next) {
-    res.send('update Book')
+    console.log(req.body);
+    console.log(req.file);
+    // res.end()
+    try {
+      const existBook = await models.Book.findAll({
+        where: {
+          [Op.or]: [{ id: req.params.id }, { isbn: req.body.isbn }]
+        }
+      })
+      const oldBook = existBook[0]
+      const bookWillBeEdited = req.body
+      const bookExist = existBook[1] || null
+      const filename = req.file ? req.file.filename : oldBook.image
+      if (bookExist !== null) {
+        deleteBookImage(req.file.filename)
+        res.json({ error: true, msg: 'Buku Sudah Ada' })
+      } else {
+        const { title, author, years, isbn, info, RackId, CategoryId } = req.body
+        // const image = filename
+        const result = await models.Book.update({
+          title,
+          author,
+          years,
+          isbn,
+          info,
+          RackId,
+          CategoryId,
+          image: filename
+        }, {
+          where: { id: req.params.id }
+        })
+        // deleteBookImage(oldBook.image)
+        res.send('EDIT OKE')
+      }
+    } catch (err) {
+      res.status(200).send(err.toString())
+    }
   },
 
   async deleteBook (req, res, next) {

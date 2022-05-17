@@ -1,9 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('Book', {
-    code: {
-      type: DataTypes.STRING(10),
-      unique: true
-    },
     title: {
       type: DataTypes.STRING(50),
       allowNull: false
@@ -17,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
     isbn: {
       type: DataTypes.STRING
     },
-    about: {
+    info: {
       type: DataTypes.TEXT
     },
     image: {
