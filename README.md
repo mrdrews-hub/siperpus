@@ -20,7 +20,12 @@
 Install my-project with npm
 
 ```bash
-  npm install my-project
-  cd my-project
+--git bash
+git clone https://github.com/mrdrews-hub/skripsi.git
+git checkout 'skripsi' or client
+npm install
+
+for server : npm run start
+for client : npm run serve
 ```
     
