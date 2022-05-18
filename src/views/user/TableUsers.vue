@@ -1,190 +1,192 @@
 <template>
-<v-data-table
-  :headers="headers"
-  :items="data"
-  sort-by="name"
-  class="elevation-1">
+  <v-container id="Users" fluid>
+    <v-row>
+      <v-col cols="12">
+        <v-data-table
+          :headers="headers"
+          :items="data"
+          sort-by="name"
+          class="elevation-1">
+          <template v-slot:top>
+            <v-toolbar
+              flat>
+              <v-toolbar-title>Edit User</v-toolbar-title>
+              <v-divider
+                class="mx-4"
+                inset
+                vertical
+              ></v-divider>
+              <v-spacer></v-spacer>
+              <v-dialog
+                v-model="dialog"
+                max-width="600px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on">
+                    <v-icon>
+                      {{ icon.mdiPlus }}
+                    </v-icon>
+                    Add User
+                  </v-btn>
+                </template>
+                <v-card :loading="loading">
+                  <v-card-title>
+                    <span class="text-h5">{{ formTitle }}</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <!-- Kangge daftar -->
+                      <v-row v-if="formTitle == 'Add User'">
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="form.username"
+                            label="username"
+                            :error-messages="v$.username.$error ? v$.username.$errors[0].$message : null"
+                            required
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="form.email"
+                            label="Email*"
+                            :error-messages="v$.email.$error ? v$.email.$errors[0].$message : null"
+                            required
+                          >
+                          </v-text-field>
+                          <span class="formerror">{{ v$.email.$models }}</span>
+                        </v-col>
 
-  <template v-slot:top>
-    <v-toolbar
-      flat>
+                        <!-- Password -->
+                        <div class="w-full">
+                          <v-col cols="12">
+                            <v-text-field
+                              v-model="form.password"
+                              label="Password"
+                              type="password"
+                              :error-messages="v$.password.$error ? v$.password.$errors[0].$message : null"
+                              required
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </div>
+                        <v-col cols="12">
+                          <v-select
+                            :items="['root','admin']"
+                            v-model="form.role"
+                            selected="root"
+                            label="Role"
+                            :error-messages="v$.role.$error ? v$.role.$errors[0].$message : null"
+                          ></v-select>
+                        </v-col>
+                      </v-row>
 
-      <v-toolbar-title>Edit User</v-toolbar-title>
-      <v-divider
-        class="mx-4"
-        inset
-        vertical
-      ></v-divider>
-      <v-spacer></v-spacer>
-      <v-dialog
-        v-model="dialog"
-        max-width="600px">
-
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            dark
-            class="mb-2"
-            v-bind="attrs"
-            v-on="on">
-            <v-icon>
-              {{ icon.mdiPlus }}
-            </v-icon>
-            Add User
-          </v-btn>
-        </template>
-        <v-card :loading="loading">
-          <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <!-- Kangge daftar -->
-                <v-row v-if="formTitle == 'Add User'">
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="form.username"
-                      label="username"
-                      :error-messages="v$.username.$error ? v$.username.$errors[0].$message : null"
-                      required
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="form.email"
-                      label="Email*"
-                      :error-messages="v$.email.$error ? v$.email.$errors[0].$message : null"
-                      required
-                    >
-                    </v-text-field>
-                    <span class="formerror">{{ v$.email.$models }}</span>
-                  </v-col>
-
-                  <!-- Password -->
-                  <div class="w-full">
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="form.password"
-                        label="Password"
-                        type="password"
-                        :error-messages="v$.password.$error ? v$.password.$errors[0].$message : null"
-                        required
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </div>
-                  <v-col cols="12">
-                    <v-select
-                      :items="['root','admin']"
-                      v-model="form.role"
-                      selected="root"
-                      label="Role"
-                      :error-messages="v$.role.$error ? v$.role.$errors[0].$message : null"
-                    ></v-select>
-                  </v-col>
-                </v-row>
-
-                <!-- Kangge Edit -->
-                <v-row v-else>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="editForm.username"
-                      label="username"
+                      <!-- Kangge Edit -->
+                      <v-row v-else>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="editForm.username"
+                            label="username"
                       
-                      required
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="editForm.email"
-                      label="Email*"
+                            required
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="editForm.email"
+                            label="Email*"
                       
-                      required
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <!-- Password -->
-                  <div class="w-full">
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editForm.newpassword"
-                        label="New Password"
-                        type="password"
+                            required
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <!-- Password -->
+                        <div class="w-full">
+                          <v-col cols="12">
+                            <v-text-field
+                              v-model="editForm.newpassword"
+                              label="New Password"
+                              type="password"
                         
-                        required
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </div>
-                  <v-col cols="12">
-                    <v-select
-                      :items="['root','admin']"
-                      v-model="editForm.role"
-                      selected="root"
-                      label="Role"
+                              required
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </div>
+                        <v-col cols="12">
+                          <v-select
+                            :items="['root','admin']"
+                            v-model="editForm.role"
+                            selected="root"
+                            label="Role"
                       
-                    ></v-select>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-              <v-divider></v-divider>
-            <v-card-actions class="flex justify-end">
-              <v-btn
-                color="error"
-                elevation="3"
-                @click="dialog = false"
-              >
-                Close
-              </v-btn>
-              <v-btn
-                v-if="formTitle == 'Add User'"
-                color="primary"
-                elevation="3"
-                @click="save"
-              >
-                Save
-              </v-btn>
-              <v-btn
-                v-else
-                color="primary"
-                elevation="3"
-                @click="saveEdit"
-              >
-                Save
-              </v-btn>
-            </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-toolbar>
-  </template>
+                          ></v-select>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions class="flex justify-end">
+                    <v-btn
+                      color="error"
+                      elevation="3"
+                      @click="dialog = false"
+                    >
+                      Close
+                    </v-btn>
+                    <v-btn
+                      v-if="formTitle == 'Add User'"
+                      color="primary"
+                      elevation="3"
+                      @click="save"
+                    >
+                      Save
+                    </v-btn>
+                    <v-btn
+                      v-else
+                      color="primary"
+                      elevation="3"
+                      @click="saveEdit"
+                    >
+                      Save
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-toolbar>
+          </template>
 
-  <template v-slot:item.actions="{ item }">
-    <!-- EditUser -->
-    <v-btn
-      fab
-      small
-      class="mr-3"
-      color="primary"
-      @click="editUser(item)">
-      <v-icon>
-        {{ icon.mdiPencil }}
-      </v-icon>
-    </v-btn>
-      <v-btn
-        fab
-        small
-        color="error"
-        @click="deleteUser(item)">
-        <v-icon>
-          {{ icon.mdiDelete }}
-        </v-icon>
-      </v-btn>
-  </template>
-  <EditForm />
-</v-data-table>
+          <template v-slot:item.actions="{ item }">
+            <!-- EditUser -->
+            <v-btn
+              fab
+              small
+              class="mr-3"
+              color="primary"
+              @click="editUser(item)">
+              <v-icon>
+                {{ icon.mdiPencil }}
+              </v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              small
+              color="error"
+              @click="deleteUser(item)">
+              <v-icon>
+                {{ icon.mdiDelete }}
+              </v-icon>
+            </v-btn>
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -210,7 +212,7 @@ export default {
       email: '',
       password: '',
       newpassword: '',
-      role: ''
+      role: '',
     })
 
     const custom = reactive({
@@ -219,13 +221,13 @@ export default {
 
     const validator = computed(() => {
       return {
-        username: { 
+        username: {
           required: custom.required,
         },
         email: { required, email },
         password: { required, minLength: minLength(4) },
-        // password2: { sameAs: helpers.withMessage('Password tidak sama', sameAs(form.password))},
-        role: { required: custom.required }
+        // password2: { sameAs: helpers.withMessage('Password tidak sama', sameAs(form.password)) },
+        role: { required: custom.required },
       }
     })
 
@@ -234,15 +236,14 @@ export default {
       username: '',
       email: '',
       newpassword: '',
-      role: ''
+      role: '',
     })
 
     const formTitle = computed(() => {
       return editedIndex.value === -1 ? 'Add User' : 'Edit User'
     })
-    
-    watch(dialog, (val) => val || close())
-    watch(editDialog, (val) => val || closeEdit())
+    watch(dialog, val => val || close())
+    watch(editDialog, val => val || closeEdit())
 
     // dataTables Headers
     const headers = ref([
@@ -253,11 +254,11 @@ export default {
     ])
 
     async function getData() {
-      try{
-          const response = await axios.get('/auth')
-          data.value = response.data
-      } catch (error){
-          console.log('Server Error!');
+      try {
+        const response = await axios.get('/auth')
+        data.value = response.data
+      } catch (error) {
+        console.log('Server Error!')
       }
     }
 
@@ -275,10 +276,9 @@ export default {
         Swal.fire({
           icon: 'warning',
           title: 'validasi error',
-          text: 'Silahkan Perbaiki dulu form yang berwarna merah 😉'
+          text: 'Silahkan Perbaiki dulu form yang berwarna merah 😉',
         })
         loading.value = false
-        return
       } else {
         const registered = {
           username: form.username,
@@ -288,26 +288,24 @@ export default {
         }
         try {
           const response = await axios.post('/auth/register', registered)
-          console.log(response.data);
-          if(response.data.error){
+          if (response.data.error) {
             Swal.fire({
-              icon:'warning',
+              icon: 'warning',
               title: response.data.msg,
             })
             loading.value = false
-            return
           }
           Swal.fire({
             toast: true,
             icon: 'success',
             title: 'User Berhasil Ditambahkan',
-            position: 'top-right'
+            position: 'top-right',
           })
           getData()
           loading.value = false
           dialog.value = false
         } catch (err) {
-          console.log(err.message);
+          console.log(err.message)
           loading.value = false
         }
       }
@@ -330,7 +328,7 @@ export default {
         username: editForm.value.username,
         email: editForm.value.email,
         password: editForm.value.newpassword,
-        role: editForm.value.role
+        role: editForm.value.role,
       }
       try {
         loading.value = true
@@ -342,24 +340,23 @@ export default {
             text: data.msg.errors[0].message
           })
           loading.value = false
-          return
         } else {
           Swal.fire({
             toast: true,
             icon: 'success',
             title: 'User Berhasil DiEdit',
-            position: 'top-right'
+            position: 'top-right',
           })
           loading.value = false
           close()
           getData()
         }
       } catch (err) {
-        console.log(err.message);
+        console.log(err.message)
         loading.value = false
       }
     }
-    const deleteUser = async(item) => {
+    const deleteUser = async item => {
       try {
         Swal.fire({
           icon: 'warning',
@@ -367,15 +364,26 @@ export default {
           text: 'Data yang dihapus mungkin tidak dapat dikembalikan',
           showCancelButton: true,
           confirmButtonText: 'Yes',
-          confirmButtonColor: 'crimson'
-        }).then((result) => {
-          if(result.isConfirmed) {
-            axios.delete(`/auth/${item.id}`).then(s => Swal.fire({toast:true, icon:'success', title:'Sukses!', position:'top-right'}))
-            getData()
+          confirmButtonColor: 'crimson',
+        }).then(result => {
+          if (result.isConfirmed) {
+            axios.delete(`/auth/${item.id}`)
+              .then(res => {
+                Swal.fire({ toast: true, icon: 'success', title: 'Sukses!', position: 'top-right' })
+                getData()
+              })
           }
         })
+      //   .then(result => {
+      //     if (result.isConfirmed) {
+      //       axios.delete(`/auth/${item.id}`).then(s => {
+      //         Swal.fire({ toast: true, icon: 'success', title: 'Sukses!', position: 'top-right'}))
+      //         getData()
+      //       }
+      //     }
+      //   })
       } catch (err) {
-        console.log(err.message);
+        console.log(err.message)
       }
     }
     const close = () => {
@@ -401,11 +409,9 @@ export default {
       save,
       saveEdit,
       editUser,
-      deleteUser
+      deleteUser,
     }
-  }
-
-
+  },
 
   // data: () => ({
   //   dialog: false,

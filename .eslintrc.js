@@ -57,6 +57,7 @@ module.exports = {
 
     'global-require': 'off',
     'no-unused-vars': 'warn',
-    'lines-around-comment': 'off'
+    'lines-around-comment': 'off',
+    'prefer-object-spread': 'off'
   },
 }

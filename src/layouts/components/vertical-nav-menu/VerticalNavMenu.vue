@@ -43,15 +43,42 @@
         :icon="icons.mdiHomeOutline"
       ></nav-menu-link>
       <nav-menu-link
-        title="Account Settings"
-        :to="{ name: 'pages-account-settings'}"
-        :icon="icons.mdiAccountCogOutline"
+        title="Rack"
+        :to="{ name: 'rack' }"
+        :icon="icons.mdiBookshelf"
       ></nav-menu-link>
-      <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title>
       <nav-menu-link
-        title="Users"
-        :to="{ name: 'users' }"
-        :icon="icons.mdiAlphaTBoxOutline"
+        title="Categories"
+        :to="{ name: 'categories' }"
+        :icon="icons.mdiShapePlus"
+      ></nav-menu-link>
+      <v-list-group
+        :value="true"
+        :prepend-icon="icons.mdiBookOpen"
+      >
+        <template v-slot:activator>
+          <v-list-item-title>Books</v-list-item-title>
+        </template>
+        <nav-menu-link
+          class="ml-4"
+          title="List Books"
+          :to="{ name: 'books' }"
+          :icon="icons.mdiBookCog"
+        ></nav-menu-link>
+        <nav-menu-link
+          class="ml-4"
+          title="Borowing"
+          :icon="icons.mdiBookClock"
+        ></nav-menu-link>
+        <nav-menu-link
+          class="ml-4"
+          title="Return"
+          :icon="icons.mdiBookCheck"
+        ></nav-menu-link>
+      </v-list-group>
+      <nav-menu-link
+        title="Report"
+        :icon="icons.mdiFileTable"
       ></nav-menu-link>
       <nav-menu-link
         title="Icons"
@@ -64,14 +91,20 @@
         :icon="icons.mdiCreditCardOutline"
       ></nav-menu-link>
       <nav-menu-link
-        title="Tables"
-        :to="{ name: 'simple-table' }"
-        :icon="icons.mdiTable"
-      ></nav-menu-link>
-      <nav-menu-link
         title="Form Layouts"
         :to="{ name: 'form-layouts' }"
         :icon="icons.mdiFormSelect"
+      ></nav-menu-link>
+      <nav-menu-link
+        title="Account Settings"
+        :to="{ name: 'pages-account-settings'}"
+        :icon="icons.mdiAccountCogOutline"
+      ></nav-menu-link>
+      <nav-menu-section-title title="Root"></nav-menu-section-title>
+      <nav-menu-link
+        title="Users"
+        :to="{ name: 'users' }"
+        :icon="icons.mdiAccountGroup"
       ></nav-menu-link>
     </v-list>
   </v-navigation-drawer>
@@ -81,13 +114,19 @@
 // eslint-disable-next-line object-curly-newline
 import {
   mdiHomeOutline,
-  mdiAlphaTBoxOutline,
+  mdiAccountGroup,
   mdiEyeOutline,
   mdiCreditCardOutline,
-  mdiTable,
+  mdiBookOpen,
+  mdiBookCheck,
+  mdiBookClock,
+  mdiBookshelf,
+  mdiBookCog,
+  mdiShapePlus,
   mdiFileOutline,
   mdiFormSelect,
   mdiAccountCogOutline,
+  mdiFileTable,
 } from '@mdi/js'
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue'
 import NavMenuGroup from './components/NavMenuGroup.vue'
@@ -109,10 +148,16 @@ export default {
     return {
       icons: {
         mdiHomeOutline,
-        mdiAlphaTBoxOutline,
+        mdiAccountGroup,
         mdiEyeOutline,
         mdiCreditCardOutline,
-        mdiTable,
+        mdiBookOpen,
+        mdiBookCheck,
+        mdiBookClock,
+        mdiBookshelf,
+        mdiBookCog,
+        mdiFileTable,
+        mdiShapePlus,
         mdiFileOutline,
         mdiFormSelect,
         mdiAccountCogOutline,

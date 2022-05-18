@@ -23,7 +23,6 @@ const verifyToken = token => {
 const isLogin = (to, from, next) => {
   const token = localStorage.getItem('token')
   if (token) {
-    alert('Anda Sudah Login! Tekan tombol logout untuk keluar')
     next({ path: '/dashboard' })
   } else {
     next()
@@ -48,6 +47,30 @@ const routes = [
     path: '/users',
     name: 'users',
     component: () => import('@/views/user/TableUsers.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/books',
+    name: 'books',
+    component: () => import('@/views/Books/BooksPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/rack',
+    name: 'rack',
+    component: () => import('@/views/Rack/RackPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/categories',
+    name: 'categories',
+    component: () => import('@/views/Categories/CategoriesPage.vue'),
     meta: {
       requiresAuth: true,
     },
