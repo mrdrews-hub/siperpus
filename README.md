@@ -9,9 +9,9 @@
 
 
 ## Requirement
---NodeJS Version 14.x.x
---npm version 8.x.x
---PostgreSQL version 14
+- NodeJS Version 14.x.x
+- npm version 8.x.x
+- PostgreSQL version 14
 
 ## Tech Stack
 
