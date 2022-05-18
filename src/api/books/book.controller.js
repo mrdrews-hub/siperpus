@@ -13,7 +13,7 @@ const BookController = {
       if (!data) {
         res.status(400).json({ error: true, msg: `Buku dengan id ${req.params.id} tidak ditemukan` })
       } else {
-        res.status(200).json({ error: false, book: data })
+        res.status(200).json({ book: data })
       }
     } catch (error) {
       res.status(500).json({ error: true, msg: error.message })
@@ -33,7 +33,7 @@ const BookController = {
         ]
       })
       // const bookRack = await book.getRack()
-      res.status(200).json({ error: false, books: book })
+      res.status(200).json({ books: book })
     } catch (err) {
       res.status(500).json({ error: true, msg: err.message })
     }
@@ -62,7 +62,7 @@ const BookController = {
           CategoryId
         }
         const result = await models.Book.create(body)
-        res.status(201).json({ error: false, msg: 'Sukses! Buku berhasil dibuat' })
+        res.status(201).json({ msg: 'Sukses! Buku berhasil dibuat' })
       }
     } catch (err) {
       deleteBookImage(filename)
@@ -71,9 +71,8 @@ const BookController = {
   },
 
   async updateBook (req, res, next) {
-    console.log(req.body);
-    console.log(req.file);
     // res.end()
+    //! jika isbn di update terus duplikat tapi gambarnya tidak diupdate
     try {
       const existBook = await models.Book.findAll({
         where: {
@@ -81,14 +80,13 @@ const BookController = {
         }
       })
       const oldBook = existBook[0]
-      const bookWillBeEdited = req.body
-      const bookExist = existBook[1] || null
-      const filename = req.file ? req.file.filename : oldBook.image
-      if (bookExist !== null) {
-        deleteBookImage(req.file.filename)
-        res.json({ error: true, msg: 'Buku Sudah Ada' })
+      if (existBook.length > 1) {
+        req.file === undefined ? false : deleteBookImage(req.file.filename)
+        res.status(201).json({ error: true, msg: `Buku dengan ISBN ${req.body.isbn} sudah pernah diinputkan`, reference: existBook[1] })
       } else {
         const { title, author, years, isbn, info, RackId, CategoryId } = req.body
+        const filename = req.file === undefined ? oldBook.image : req.file.filename
+        console.log(filename);
         // const image = filename
         const result = await models.Book.update({
           title,
@@ -96,17 +94,17 @@ const BookController = {
           years,
           isbn,
           info,
+          image: filename,
           RackId,
-          CategoryId,
-          image: filename
+          CategoryId
         }, {
           where: { id: req.params.id }
         })
         // deleteBookImage(oldBook.image)
-        res.send('EDIT OKE')
+        res.status(201).json({ msg: 'Buku Berhasil Di Edit' })
       }
     } catch (err) {
-      res.status(200).send(err.toString())
+      res.status(202).json({ error: true, msg: err.toString() })
     }
   },
 
