@@ -44,7 +44,7 @@
 
     <v-main>
       <div class="app-content-container boxed-container pa-6">
-        <transition name="slide-fade">
+        <transition name="slide-fade" mode="out-in">
           <slot></slot>
         </transition>
       </div>
@@ -149,11 +149,11 @@ background: linear-gradient(190deg, rgba(34,193,195,1) 24%, rgba(253,187,45,0.26
   transition: all .3s ease;
 }
 .slide-fade-enter-active {
-  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
+  transform: translateX(8px);
   opacity: 0;
 }
 </style>

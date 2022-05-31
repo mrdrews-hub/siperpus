@@ -12,7 +12,7 @@
           :disabled="loading"
           :loading="loading">
           <v-card-title>
-            <span class="text-h5">Add Category</span>
+            <span class="text-h5">Add Members</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -20,22 +20,38 @@
               <v-row>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="form.categories"
-                    label="Category"
-                    :error-messages="v$.categories.$error ? v$.categories.$errors[0].$message : null"
+                    v-model="form.nama"
+                    label="Nama"
+                    :error-messages="v$.nama.$error ? v$.nama.$errors[0].$message : null"
                     filled
                     required
                   >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-textarea
-                    v-model="form.info"
+                  <v-text-field
+                    v-model="form.kelas"
                     filled
                     name="input-7-4"
-                    label="Information(optional)"
-                    placeholder="Informasi tambahan"
-                  ></v-textarea>
+                    label="Kelas"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="form.alamat"
+                    filled
+                    name="input-7-4"
+                    label="Alamat"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="form.no_hp"
+                    filled
+                    type="number"
+                    name="input-7-4"
+                    label="No_HP"
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -82,12 +98,14 @@ export default defineComponent({
 
   setup(props, ctx) {
     const form = reactive({
-      categories: '',
-      info: '',
+      nama: '',
+      kelas: '',
+      alamat: '',
+      no_hp: '',
     })
     const validator = computed(() => {
       return {
-        categories: {
+        nama: {
           required: helpers.withMessage('Tidak Boleh Kosong!', required),
         },
       }
@@ -96,7 +114,6 @@ export default defineComponent({
 
     onMounted(() => {
       v$.value.$validate()
-      console.log('mounted ?');
     })
 
     const save = async () => {

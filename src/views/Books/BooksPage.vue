@@ -1,27 +1,39 @@
 <template>
   <v-container fluid>
     <v-row>
+      <v-col cols="4">
+      <v-text-field
+        v-model="search"
+        label="Cari Buku"
+        background-color="white"
+        hide-details
+        filled
+        shaped
+        outlined
+        ></v-text-field>
+      </v-col>
       <v-col cols="12">
         <v-data-table
           :headers="headers"
           :items="books"
           :loading="loading"
+          :search="search"
           sort-by="name"
           class="elevation-1"
         >
           <template v-slot:item.image="{ item }">
             <div class="d-flex justify-center py-2 px-2">
               <v-img v-if="item.image !== ''"
-                    itemtype="image"
-                    height="150"
-                    width="160"
-                    :src="`http://localhost:3030/images/${item.image}`"
+                     itemtype="image"
+                     height="150"
+                     width="160"
+                     :src="`http://localhost:3030/images/${item.image}`"
               >
               </v-img>
               <v-img v-else
-                    src="../../assets/images/default/diary.png"
-                    height="150"
-                    width="160"
+                     src="../../assets/images/default/diary.png"
+                     height="150"
+                     width="160"
               >
               </v-img>
             </div>
@@ -37,17 +49,17 @@
                 vertical
               ></v-divider>
               <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    @click.stop="tambahDialog = true"
-                  >
-                    <v-icon>
-                      {{ icon.mdiPlus }}
-                    </v-icon>
-                    Add Book
-                  </v-btn>
+              <v-btn
+                color="primary"
+                dark
+                class="mb-2"
+                @click.stop="tambahDialog = true"
+              >
+                <v-icon>
+                  {{ icon.mdiPlus }}
+                </v-icon>
+                Add Book
+              </v-btn>
             </v-toolbar>
           </template>
 
@@ -133,11 +145,14 @@ export default {
     const headers = ref([
       { text: 'Image', value: 'image', sortable: false },
       { text: 'Title', value: 'title' },
-      { text: 'ISBN', value: 'isbn' },
-      { text: 'Rack', value: 'Rack.rack' },
+      { text: 'Author', value: 'author' },
+      { text: 'Penerbit', value: 'penerbit' },
       { text: 'Category', value: 'Category.categories' },
+      { text: 'Rack', value: 'Rack.rack' },
+      { text: 'Jumlah', value: 'stock' },
       { text: 'Actions', value: 'actions', sortable: false },
     ])
+    const search = ref()
     const tambahDialog = ref(false)
     const editDialog = ref(false)
     const detailDialog = ref(false)
@@ -269,7 +284,8 @@ export default {
       sendData,
       saveEdit,
       racks,
-      editData
+      editData,
+      search,
     }
   },
 }

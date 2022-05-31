@@ -1,50 +1,55 @@
 <template>
   <v-row justify="center">
-
     <v-col cols="auto">
       <v-dialog
-        v-model="tambahDialog"
+        v-model="editDialog"
         persistent
         transition="dialog-bottom-transition"
-        max-width="800"
+        max-width="600"
       >
-        <v-card
-          :disabled="loading"
-          :loading="loading">
+        <v-card>
           <v-card-title>
-            <span class="text-h5">Add Category</span>
+            <span class="text-h5">Edit Members</span>
           </v-card-title>
           <v-card-text>
             <v-container>
-              <!-- Kangge daftar -->
               <v-row>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="form.categories"
-                    label="Category"
-                    :error-messages="v$.categories.$error ? v$.categories.$errors[0].$message : null"
-                    filled
+                    v-model="form.nama"
+                    :error-messages="v$.nama.$error ? v$.nama.$errors[0].$message : null"
+                    label="Nama"
                     required
-                  >
-                  </v-text-field>
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-textarea
-                    v-model="form.info"
-                    filled
-                    name="input-7-4"
-                    label="Information(optional)"
-                    placeholder="Informasi tambahan"
-                  ></v-textarea>
+                  <v-text-field
+                    v-model="form.kelas"
+                    label="Kelas"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="form.alamat"
+                    label="Alamat"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="form.no_hp"
+                    label="no_hp"
+                    required
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
           </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions class="flex justify-end">
+          <v-card-actions>
+            <v-spacer></v-spacer>
             <v-btn
               color="error"
-              elevation="3"
               rounded
               @click="close"
             >
@@ -52,7 +57,6 @@
             </v-btn>
             <v-btn
               color="primary"
-              elevation="3"
               rounded
               @click="save"
             >
@@ -64,48 +68,57 @@
     </v-col>
   </v-row>
 </template>
-
+sc
 <script>
-import {
-  defineComponent, reactive, computed, onMounted, ref,
-} from '@vue/composition-api'
+import { defineComponent, ref, reactive, computed, toRefs, onMounted } from '@vue/composition-api'
 import useValidate from '@vuelidate/core'
-import { required, maxLength, helpers } from '@vuelidate/validators'
+import { required, helpers, maxLength } from '@vuelidate/validators'
 import Swal from 'sweetalert2'
-import axios from 'axios'
 
 export default defineComponent({
   props: {
-    tambahDialog: Boolean,
-    loading: Boolean,
+    editDialog: Boolean,
+    data: {
+      type: Object,
+      default(rawProps) {
+        return { message: 'hello' }
+      },
+    },
   },
 
   setup(props, ctx) {
+    const { data } = toRefs(props)
+    const loading = ref(false)
     const form = reactive({
-      categories: '',
-      info: '',
+      id: data.value.id,
+      nama: data.value.nama,
+      kelas: data.value.kelas,
+      alamat: data.value.alamat,
+      no_hp: data.value.no_hp,
     })
+
     const validator = computed(() => {
       return {
-        categories: {
+        nama: {
           required: helpers.withMessage('Tidak Boleh Kosong!', required),
         },
       }
     })
+
     const v$ = useValidate(validator, form)
 
     onMounted(() => {
       v$.value.$validate()
-      console.log('mounted ?');
     })
 
-    const save = async () => {
+    const save = () => {
       if (v$.value.$error) {
-        await Swal.fire({
+        Swal.fire({
           icon: 'warning',
           title: 'validasi error',
           text: 'Silahkan Perbaiki dulu form yang berwarna merah 😉',
         })
+        loading.value = false
       } else {
         ctx.emit('save', form)
       }
@@ -116,7 +129,6 @@ export default defineComponent({
     }
 
     return {
-    //   loading,
       form,
       save,
       close,

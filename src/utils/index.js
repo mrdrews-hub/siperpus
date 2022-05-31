@@ -20,3 +20,25 @@ export const useRouter = () => {
 }
 
 export const _ = null
+
+export const Rupiah = (money) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(money)
+}
+
+export const selisihHari = (date1, date2) => {
+  const value1 = new Date(date1).getTime()
+  const value2 = new Date(date2).getTime()
+  const oneDay = 24 * 60 * 60 * 1000
+
+  const diffday = Math.round(Math.round(value2 - value1) / oneDay)
+
+  if (diffday > 0) {
+    return 0
+  } else {
+    return diffday
+  }
+}

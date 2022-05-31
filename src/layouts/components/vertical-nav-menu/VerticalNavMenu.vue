@@ -52,6 +52,11 @@
         :to="{ name: 'categories' }"
         :icon="icons.mdiShapePlus"
       ></nav-menu-link>
+      <nav-menu-link
+        title="Members"
+        :to="{ name: 'members' }"
+        :icon="icons.mdiAccountGroup"
+      ></nav-menu-link>
       <v-list-group
         :value="true"
         :prepend-icon="icons.mdiBookOpen"
@@ -67,12 +72,20 @@
         ></nav-menu-link>
         <nav-menu-link
           class="ml-4"
+          title="Stock"
+          :to="{ name: 'stocks' }"
+          :icon="icons.mdiBookPlus"
+        ></nav-menu-link>
+        <nav-menu-link
+          class="ml-4"
           title="Borowing"
+          :to="{ name: 'borowing' }"
           :icon="icons.mdiBookClock"
         ></nav-menu-link>
         <nav-menu-link
           class="ml-4"
           title="Return"
+          :to="{ name: 'return' }"
           :icon="icons.mdiBookCheck"
         ></nav-menu-link>
       </v-list-group>
@@ -104,7 +117,7 @@
       <nav-menu-link
         title="Users"
         :to="{ name: 'users' }"
-        :icon="icons.mdiAccountGroup"
+        :icon="icons.mdiAccountKey"
       ></nav-menu-link>
     </v-list>
   </v-navigation-drawer>
@@ -123,10 +136,12 @@ import {
   mdiBookshelf,
   mdiBookCog,
   mdiShapePlus,
+  mdiAccountKey,
   mdiFileOutline,
   mdiFormSelect,
   mdiAccountCogOutline,
   mdiFileTable,
+  mdiBookPlus
 } from '@mdi/js'
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue'
 import NavMenuGroup from './components/NavMenuGroup.vue'
@@ -156,6 +171,8 @@ export default {
         mdiBookClock,
         mdiBookshelf,
         mdiBookCog,
+        mdiBookPlus,
+        mdiAccountKey,
         mdiFileTable,
         mdiShapePlus,
         mdiFileOutline,

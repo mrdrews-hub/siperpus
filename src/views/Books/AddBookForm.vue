@@ -35,14 +35,14 @@
                 <v-col cols="12">
                   <v-text-field
                     v-model="form.title"
-                    label="Book Title"
+                    label="Judul Buku"
                     :error-messages="v$.title.$error ? v$.title.$errors[0].$message : null"
                     filled
                     required
                   >
                   </v-text-field>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="4">
                   <v-select
                     v-model="form.RackId"
                     :items="racks"
@@ -53,7 +53,7 @@
                     solo
                   ></v-select>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="4">
                   <v-select
                     v-model="form.CategoryId"
                     :items="categories"
@@ -63,16 +63,12 @@
                     solo
                   ></v-select>
                 </v-col>
-                <v-col cols="12">
+                <v-col cols="4">
                   <v-text-field
-                    v-model="form.isbn"
-                    label="ISBN"
-                    :error-messages="v$.isbn.$error ? v$.isbn.$errors[0].$message : null"
+                    v-model.number="form.stock"
+                    label="Jumlah Buku"
                     type="number"
-                    filled
-                    required
-                  >
-                  </v-text-field>
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
@@ -86,7 +82,27 @@
                 <v-col cols="6">
                   <v-text-field
                     v-model.number="form.years"
-                    label="Release Date"
+                    label="Tahun"
+                    type="number"
+                    filled
+                    required
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="form.penerbit"
+                    label="Penerbit"
+                    filled
+                    required
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="form.isbn"
+                    label="ISBN"
+                    :error-messages="v$.isbn.$error ? v$.isbn.$errors[0].$message : null"
                     type="number"
                     filled
                     required
@@ -232,9 +248,11 @@ export default defineComponent({
       title: '',
       author: '',
       years: '',
+      penerbit: '',
       isbn: '',
       RackId: '',
       CategoryId: '',
+      stock: '',
       info: '',
       image: null,
     })

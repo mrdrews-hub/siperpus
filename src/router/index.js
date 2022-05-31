@@ -60,6 +60,14 @@ const routes = [
     },
   },
   {
+    path: '/stocks',
+    name: 'stocks',
+    component: () => import('@/views/Stock/StockPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/rack',
     name: 'rack',
     component: () => import('@/views/Rack/RackPage.vue'),
@@ -71,6 +79,30 @@ const routes = [
     path: '/categories',
     name: 'categories',
     component: () => import('@/views/Categories/CategoriesPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/members',
+    name: 'members',
+    component: () => import('@/views/Member/MemberPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/borowing',
+    name: 'borowing',
+    component: () => import('@/views/Borowing/BorowingPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/return',
+    name: 'return',
+    component: () => import('@/views/Return/ReturnPage.vue'),
     meta: {
       requiresAuth: true,
     },

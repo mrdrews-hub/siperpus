@@ -3,7 +3,7 @@
     <v-dialog
       v-model="detailDialog"
       persistent
-      fullscreen
+      width="900"
       hide-overlay
       transition="dialog-bottom-transition"
     >
@@ -62,15 +62,6 @@
                       filled
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="book.isbn"
-                      label="ISBN"
-                      filled
-                      required
-                    >
-                    </v-text-field>
-                  </v-col>
                   <v-col cols="6">
                     <v-text-field
                       v-model="book.author"
@@ -84,6 +75,24 @@
                     <v-text-field
                       v-model.number="book.years"
                       label="Release Date"
+                      filled
+                      required
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="book.penerbit"
+                      label="Penerbit"
+                      filled
+                      required
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="book.isbn"
+                      label="ISBN"
                       filled
                       required
                     >
@@ -130,7 +139,7 @@ export default defineComponent({
     data: {
       type: Object,
       default(rawProps) {
-        return { message: 'hello' }
+        return { message: [] }
       },
     },
   },
