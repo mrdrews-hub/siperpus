@@ -7,8 +7,15 @@ module.exports = function (sequelize, DataTypes) {
     author: {
       type: DataTypes.STRING(30)
     },
+    penerbit: {
+      type: DataTypes.STRING
+    },
     years: {
       type: DataTypes.STRING(4)
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
     },
     isbn: {
       type: DataTypes.STRING

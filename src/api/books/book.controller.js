@@ -29,6 +29,9 @@ const BookController = {
           },
           {
             model: models.Categories
+          },
+          {
+            model: models.Stock
           }
         ]
       })
@@ -50,13 +53,15 @@ const BookController = {
         deleteBookImage(filename)
         res.json({ error: true, errorPoint: 'isbn', msg: `Buku dengan ISBN ${req.body.isbn} sudah pernah diinputkan`, reference: isBookExist })
       } else {
-        const { title, author, years, isbn, info, RackId, CategoryId } = req.body
+        const { title, author, years, penerbit, isbn, info, RackId, CategoryId, stock } = req.body
         const body = {
           title,
           author,
           years,
           isbn,
           info,
+          stock,
+          penerbit,
           image: filename,
           RackId,
           CategoryId
@@ -84,7 +89,7 @@ const BookController = {
         req.file === undefined ? false : deleteBookImage(req.file.filename)
         res.status(201).json({ error: true, msg: `Buku dengan ISBN ${req.body.isbn} sudah pernah diinputkan`, reference: existBook[1] })
       } else {
-        const { title, author, years, isbn, info, RackId, CategoryId } = req.body
+        const { title, author, years, penerbit, isbn, info, RackId, CategoryId, stock } = req.body
         const filename = req.file === undefined ? oldBook.image : req.file.filename
         console.log(filename);
         // const image = filename
@@ -92,8 +97,10 @@ const BookController = {
           title,
           author,
           years,
+          penerbit,
           isbn,
           info,
+          stock,
           image: filename,
           RackId,
           CategoryId
@@ -114,6 +121,9 @@ const BookController = {
         where: { id: req.params.id }
       })
       deleteBookImage(dataWillBeDeleted.image)
+      const deleteStock = await models.Stock.destroy({
+        where: { BookId: req.params.id }
+      })
       const response = await models.Book.destroy({
         where: { id: req.params.id }
       })

@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('Rack', {
     rack: {
-      type: DataTypes.STRING(6),
+      type: DataTypes.STRING(30),
       unique: true
     },
     info: {
