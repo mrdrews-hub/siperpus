@@ -28,6 +28,7 @@ export default defineComponent({
       function onScanSuccess(decodedText, decodedResult) {
         ctx.emit('result', decodedText, decodedResult, html5QrcodeScanner)
       }
+      
 
       html5QrcodeScanner.render(onScanSuccess)
     })

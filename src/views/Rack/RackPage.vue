@@ -106,7 +106,6 @@ export default {
         const { data } = await axios.get('/rack')
         racks.value = data.rack
         loading.value = false
-        console.log(racks.value)
       } catch (error) {
         console.log('Server Error!', error.toString())
         loading.value = false
@@ -170,6 +169,16 @@ export default {
         })
         if (result.isConfirmed) {
           const { data } = await axios.delete(`/rack/delete/${item.id}`)
+          console.log(data);
+          if (data.error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Tidak Dapat Menghapus',
+              text: data.msg,
+            })
+            loading.value = false
+            return
+          }
           Swal.fire({ toast: true, icon: 'success', title: 'Sukses!', position: 'top-right' })
           getData()
         }

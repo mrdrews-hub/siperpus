@@ -94,7 +94,6 @@ export default {
       } else {
         scanResult.value = data
         showResult.value = true
-        console.log(scanResult);
       }
     }
     const close = () => {

@@ -12,7 +12,7 @@
             <v-toolbar
               flat
             >
-              <v-toolbar-title>List Categories</v-toolbar-title>
+              <v-toolbar-title>List Pengembalian</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn
                 color="primary"
@@ -21,26 +21,24 @@
                 @click.stop="dialog = true"
               >
                 <v-icon>
+                  {{ icon.mdiPlus }}
                 </v-icon>
-                Add Category
+                Pengembalian
               </v-btn>
             </v-toolbar>
           </template>
 
         </v-data-table>
-    <h1>RETURNING PAGE</h1>
-    <canvas id="QRCode" width="800" height="800"></canvas>
     <add-returns
       v-if="dialog"
       :dialog="dialog"
       @close="close"
     />
-    <v-btn @click="onDialog"></v-btn>
   </v-container>
 </template>
 <script>
 import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
-import { mdiCloseBox } from '@mdi/js'
+import { mdiCloseBox, mdiPlus } from '@mdi/js'
 import axios from 'axios'
 import QRCode from 'qrcode'
 import AddReturns from './AddReturns.vue'
@@ -82,12 +80,6 @@ export default {
     //     }
     //   }
     // )
-    onMounted(() => {
-      QRCode.toCanvas(document.getElementById('QRCode'), '123asdwsdasdw', function(err) {
-        if (err) console.log(err);
-        console.log('QR Mounted');
-      })
-    })
     const onDialog = () => {
       dialog.value = true
     }
@@ -96,7 +88,7 @@ export default {
     }
 
     return {
-      icon: { mdiCloseBox },
+      icon: { mdiCloseBox, mdiPlus },
       dialog,
       trxId,
       dataPinjam,

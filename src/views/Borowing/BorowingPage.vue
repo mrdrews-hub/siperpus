@@ -72,7 +72,7 @@
               fab
               small
               color="error"
-              @click="deleteBorows(item)"
+              @click="deleteBorrows(item)"
             >
               <v-icon>
                 {{ icon.mdiDelete }}
@@ -114,6 +114,7 @@ import AddBorrowForm from './AddBorrowForm.vue'
 import EditBorrowForm from './EditBorrowForm.vue'
 import DetailBorrow from './DetailBorrow.vue'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default defineComponent({
     components: { AddBorrowForm, EditBorrowForm, DetailBorrow },
@@ -154,6 +155,32 @@ export default defineComponent({
       getBorrowingData()
     }
 
+    const deleteBorrows = async (item) => {
+      try {
+        const result = await Swal.fire({
+          icon: 'warning',
+          title: 'Are you Sure ?',
+          text: 'Data yang dihapus mungkin tidak dapat dikembalikan',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          confirmButtonColor: 'crimson',
+        })
+        if (result.isConfirmed) {
+          const { data } = await axios.delete(`/borrow/delete/${item.id}`)
+          if (data.error) {
+            return Swal.fire({
+              icon: 'error',
+              title: 'Terjadi Kesalahan',
+            })
+          }
+          Swal.fire({ toast: true, icon: 'success', title: 'Sukses!', position: 'top-right', timer: 1500 })
+          getBorrowingData()
+        }
+      } catch (err) {
+        console.log(err.toString())
+      }
+    }
+
     const hitungHari = (hariIni, harikembali) => {
       const oneDay = 24 * 60 * 60 * 1000 // hours*minutes*seconds*milliseconds
       const secondDate = harikembali.getTime();
@@ -177,7 +204,8 @@ export default defineComponent({
         sendData,
         closeDialog,
         hitungHari,
-        detailDialog
+        detailDialog,
+        deleteBorrows,
     }
 
     },

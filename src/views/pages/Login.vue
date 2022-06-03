@@ -41,6 +41,11 @@
               @keyup.enter="handleLogin"
             ></v-text-field>
 
+            <v-switch
+              class="flex justify-end"
+              v-model="isAdmin"
+              label="Admin"
+            ></v-switch>
             <v-btn
               :disabled="loading"
               block
@@ -94,6 +99,7 @@ export default {
     const router = context.root.$router
     const store = context.root.$store
 
+    const isAdmin = ref(false)
     const isPasswordVisible = ref(false)
     const loading = ref(false)
     const email = ref('')
@@ -101,29 +107,68 @@ export default {
 
     async function handleLogin() {
       loading.value = true
-      try {
-        const response = await axios.post('/auth/login', {
-          email: email.value,
-          password: password.value,
-        })
-        const { token } = response.data
-        store.dispatch('login', token)
-        loading.value = false
-        Swal.fire({
-          toast: true,
-          icon: 'success',
-          title: 'Login Sukses',
-          position: 'top-right',
-          timer: 600,
-        })
-        router.push({ name: 'dashboard' }).catch(err => console.log(err))
-      } catch (err) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Username atau Password salah',
-        })
-        console.log(err.message)
-        loading.value = false
+      if (isAdmin.value === true) {
+        try {
+          const response = await axios.post('/auth/login', {
+            email: email.value,
+            password: password.value,
+          })
+          console.log(response);
+          const { token, userLogin } = response.data
+          const dataLogin = {
+            token,
+            userLogin
+          }
+          store.dispatch('login', dataLogin)
+          loading.value = false
+          Swal.fire({
+            toast: true,
+            icon: 'success',
+            title: 'Login Sukses',
+            position: 'top-right',
+            timer: 600,
+          })
+          // router.push({ name: 'dashboard' }).catch(err => console.log(err))
+        } catch (err) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Username atau Password salah',
+          })
+          console.log(err.message)
+          loading.value = false
+        }
+      } else {
+        try {
+          const response = await axios.post('/members/login', {
+            nisn: email.value,
+            password: password.value,
+          })
+          console.log(response);
+          const { token, userLogin } = response.data
+          const dataLogin = {
+            token,
+            userLogin: userLogin.dataValues
+          }
+          store.dispatch('login', dataLogin)
+          // sessionStorage.setItem('token', token)
+          // sessionStorage.setItem('userData', JSON.stringify(userLogin.dataValues))
+          Swal.fire({
+            toast: true,
+            icon: 'success',
+            title: 'Login Sukses',
+            position: 'top-right',
+            timer: 600,
+          })
+          loading.value = false
+          // router.push({ name: 'dashboard' }).catch(err => console.log(err))
+        } catch (err) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Username atau Password salah',
+          })
+          console.log(err.message)
+          loading.value = false
+        }
       }
     }
 
@@ -133,6 +178,7 @@ export default {
       email,
       password,
       handleLogin,
+      isAdmin,
 
       icons: {
         mdiEyeOutline,

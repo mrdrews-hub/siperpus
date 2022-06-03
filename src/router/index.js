@@ -169,24 +169,24 @@ const router = new VueRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!token) {
-      console.log('NOT OK')
-      next({ name: 'Login' })
-    } else {
-      const isValid = verifyToken(token)
-      if (isValid === false) {
-        localStorage.removeItem('token')
-        next({ name: 'Login' })
-      } else {
-        next()
-      }
-    }
-  } else {
-    next()
-  }
+// router.beforeEach((to, from, next) => {
+//   const token = localStorage.getItem('token')
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     if (!token) {
+//       console.log('NOT OK')
+//       next({ name: 'Login' })
+//     } else {
+//       const isValid = verifyToken(token)
+//       if (isValid === false) {
+//         localStorage.removeItem('token')
+//         next({ name: 'Login' })
+//       } else {
+//         next()
+//       }
+//     }
+//   } else {
+//     next()
+//   }
   // const token = localStorage.getItem('token')
   // if (!token) {
   //   const decoded = jwt_decode(token)
@@ -195,6 +195,6 @@ router.beforeEach((to, from, next) => {
   // } else {
   //   next()
   // }
-})
+// })
 
 export default router

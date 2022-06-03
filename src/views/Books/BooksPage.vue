@@ -255,9 +255,15 @@ export default {
         })
         if (result.isConfirmed) {
           const { data } = await axios.delete(`/books/delete/${item.id}`)
+          if (data.error) {
+            return Swal.fire({
+              icon: 'error',
+              title: 'Tidak Dapat Menghapus',
+              text: 'Buku ini mungkin sedang digunakan',
+            })
+          }
           Swal.fire({ toast: true, icon: 'success', title: 'Sukses!', position: 'top-right' })
           getData()
-          console.log(data)
         }
       } catch (err) {
         console.log(err.toString())

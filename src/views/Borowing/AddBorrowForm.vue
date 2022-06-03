@@ -336,8 +336,11 @@ export default defineComponent({
     const getMember = async () => {
       try {
         const response = await axios.get('/members')
-        members.value = response.data.members
-        console.log(members.value);
+        if (response.data.error) {
+          console.log(response);
+        } else {
+          members.value = response.data.members
+        }
       } catch (err) {
         console.log(err.toString());
       }
@@ -346,7 +349,13 @@ export default defineComponent({
     const getAllBook = async () => {
       try {
         const response = await axios.get('/books')
-        books.value = response.data.books
+        if (response.data.error) {
+          console.log(response)
+        } else {
+          const availableBooks = response.data.books.filter(book => book.stock > 0)
+          console.log(availableBooks);
+          books.value = availableBooks
+        }
       } catch (error) {
         console.log(error.toString());
       }

@@ -14,6 +14,12 @@ export default{
     isAdmin(state) {
       return state.user.role == 'admin' ? true : false
     },
+    isRoot(state) {
+      return state.user.role == 'root' ? true : false
+    },
+    isMember(state) {
+      return state.user.role == 'member' ? true : false
+    },
     isVerified(state) {
       return state.token == null ? false : true
     }
@@ -27,10 +33,11 @@ export default{
     },
   },
   actions: {
-    login({ commit }, token) {
-      localStorage.setItem('token', token)
-      const decoded = jwt_decode(token)
-      commit('SET_USER', decoded)
+    login({ commit }, dataLogin) {
+      sessionStorage.setItem('token', dataLogin.token)
+      sessionStorage.setItem('user', JSON.stringify(dataLogin.userLogin))
+      // const decoded = jwt_decode(token)
+      commit('SET_USER', dataLogin.userLogin)
       // return axios.post('/auth/login', User)
       //         .then(({ data }) => {
       //             dispatch('verifytoken', data.token)

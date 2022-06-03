@@ -147,7 +147,7 @@ export default {
         no_hp: payload.no_hp
       }
       try {
-        const { data, status, statusText } = await axios.post('/members/create', membersData)
+        const { data, status, statusText } = await axios.post('/members/create', payload)
         console.log({ data, status, statusText })
         if (data.error) {
           Swal.fire({

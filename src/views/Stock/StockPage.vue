@@ -34,18 +34,6 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <!-- EditUser -->
-        <v-btn
-          fab
-          small
-          class="mr-3"
-          color="primary"
-          @click="editStock(item)"
-        >
-          <v-icon>
-            {{ icon.mdiPencil }}
-          </v-icon>
-        </v-btn>
         <v-btn
           fab
           small
@@ -61,13 +49,6 @@
     <add-stock
       v-if="tambahDialog"
       :dialog="tambahDialog"
-      :loading="loading"
-      @close="closeDialog"
-    />
-    <edit-stock
-      v-if="editDialog"
-      :dialog="editDialog"
-      :data="editData"
       :loading="loading"
       @close="closeDialog"
     />

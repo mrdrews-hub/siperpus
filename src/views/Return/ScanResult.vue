@@ -142,6 +142,7 @@ export default defineComponent({
     },
     setup(props, ctx) {
         const transaction = props.data
+        console.log(transaction);
     const close = () => {
         ctx.emit('closeResult')
     }
