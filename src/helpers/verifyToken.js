@@ -3,6 +3,7 @@ const config = require('../config/config')
 
 module.exports = (req, res, next) => {
   const token = req.header('auth-token')
+  console.log(token);
   if (!token) {
     res.status(401).send('invalid token')
   }

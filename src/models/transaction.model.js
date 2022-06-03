@@ -14,6 +14,10 @@ module.exports = function (sequelize, DataTypes) {
     denda: {
       type: DataTypes.INTEGER,
       defaultValue: 0
+    },
+    dikembalikan: {
+      type: DataTypes.STRING(5),
+      defaultValue: 'false'
     }
   }, { timestamps: false })
 }

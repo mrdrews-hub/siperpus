@@ -7,8 +7,14 @@ const BookController = {
   async book (req, res, next) {
     try {
       const data = await models.Book.findOne({
-        include: models.Rack,
-        where: { id: req.params.id }
+        include: [
+          {
+            model: models.Rack, 
+          },
+          {
+            model: models.Transaction, 
+          }
+        ],
       })
       if (!data) {
         res.status(400).json({ error: true, msg: `Buku dengan id ${req.params.id} tidak ditemukan` })
@@ -118,16 +124,25 @@ const BookController = {
   async deleteBook (req, res, next) {
     try {
       const dataWillBeDeleted = await models.Book.findOne({
+        include: [
+          {
+            model: models.Transaction
+          }
+        ],
         where: { id: req.params.id }
       })
-      deleteBookImage(dataWillBeDeleted.image)
-      const deleteStock = await models.Stock.destroy({
-        where: { BookId: req.params.id }
-      })
-      const response = await models.Book.destroy({
-        where: { id: req.params.id }
-      })
-      res.status(201).json({ msg: 'Buku Berhasil Dihapus' })
+      if (dataWillBeDeleted.Transactions.length > 0) {
+        res.json({ error: true, msg: 'Buku sedang digunakan' })
+      } else {
+        deleteBookImage(dataWillBeDeleted.image)
+        const deleteStock = await models.Stock.destroy({
+          where: { BookId: req.params.id }
+        })
+        const response = await models.Book.destroy({
+          where: { id: req.params.id }
+        })
+        res.status(201).json({ msg: 'Buku Berhasil Dihapus' })
+      }
     } catch (err) {
       res.status(400).send(err.toString())
     }

@@ -4,6 +4,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       unique: true
     },
+    nisn: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     nama: {
       type: DataTypes.STRING
     },
@@ -13,8 +17,21 @@ module.exports = function (sequelize, DataTypes) {
     alamat: {
       type: DataTypes.TEXT
     },
+    tempat: {
+      type: DataTypes.STRING
+    },
+    tanggal_lahir: {
+      type: DataTypes.DATEONLY
+    },
     no_hp: {
       type: DataTypes.STRING
+    },
+    password: {
+      type: DataTypes.STRING
+    },
+    role: {
+      type: DataTypes.STRING(6),
+      defaultValue: 'member'
     }
   })
 }

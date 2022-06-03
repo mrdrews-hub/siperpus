@@ -38,7 +38,15 @@ class AuthController {
           email: userExist.email,
           role: userExist.role
         }, config.jwt_secret, { expiresIn: '60' })
-        res.header('auth-token').json({ msg: 'Login Sukses', token })
+        res.header('auth-token').json({
+          msg: 'Login Sukses',
+          token,
+          userLogin: {
+            username: userExist.username,
+            email: userExist.email,
+            role: userExist.role
+          }
+      })
       } else {
         res.status(401).json({ error: true, msg: 'Password salah' })
       }

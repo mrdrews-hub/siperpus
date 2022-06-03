@@ -27,9 +27,9 @@ bookRelation(sequelize, DataTypes)
 
 // Get any model for sync purpose
 const { Rack, Book, Borrowing, Member, Transaction, Stock } = sequelize.models
-// Borrowing.sync({ force: true })
-sequelize.sync()
-// MemberTransaction.sync({ force: true })
+Member.sync({ force: true })
+// sequelize.sync()
+// Book.sync({ force: true })
 // Transaction.sync({ force: true })
 // Stock.sync({ force: true })
 

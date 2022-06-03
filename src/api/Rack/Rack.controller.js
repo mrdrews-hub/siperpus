@@ -106,7 +106,11 @@ const RackController = {
       })
       res.status(200).json({ msg: 'Rack Berhasil Dihapus' })
     } catch (err) {
-      res.status(500).send(err.message)
+      if (err.name == 'SequelizeForeignKeyConstraintError') {
+        res.json({ error: true, msg: 'Rack sedang digunakan' })
+      } else {
+        res.status(400).json({ error: true, err })
+      }
     }
   }
 }

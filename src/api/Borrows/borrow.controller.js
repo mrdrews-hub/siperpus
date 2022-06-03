@@ -190,12 +190,15 @@ const BorrowController = {
 
   async deleteBorrow (req, res, next) {
     try {
-      const response = await models.Borrow.destroy({
+      const deleteTransaction = await models.Transaction.destroy({
         where: { id: req.params.id }
       })
-      res.status(200).json({ msg: 'Borrow Berhasil Dihapus' })
+      const deleteBorrowing = await models.Borrowing.destroy({
+        where: { TransactionId: req.params.id }
+      })
+      res.status(200).json({ msg: 'Transaksi Berhasil Dihapus' })
     } catch (err) {
-      res.status(500).send(err.message)
+      res.status(200).json({ error: true, err })
     }
   }
 }

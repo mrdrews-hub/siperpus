@@ -1,5 +1,8 @@
 const { models } = require('../../models')
 const { Op } = require('sequelize')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('../../config/config')
 
 const MemberController = {
 
@@ -27,6 +30,31 @@ const MemberController = {
     }
   },
 
+  async memberLogin (req, res, next) {
+    const userExist = await models.Member.findOne({ where: { nisn: req.body.nisn } })
+    if (userExist) {
+      const checkPassword = userExist.password === req.body.password
+      if (checkPassword) {
+        const token = jwt.sign({
+          username: userExist.username,
+          email: userExist.email,
+          role: 'member'
+        }, config.jwt_secret )
+        res.header('auth-token').json({
+          msg: 'Login Sukses',
+          token,
+          userLogin: {
+            ...userExist
+          }
+        })
+      } else {
+        res.status(401).json({ error: true, msg: 'Password salah' })
+      }
+    } else {
+      res.status(401).json({ error: true, msg: 'Email atau password salah' })
+    }
+  },
+
   async createMember (req, res, next) {
     function generateId () {
       return Math.floor(Math.random() * 9999)
@@ -39,18 +67,28 @@ const MemberController = {
       if (isExist) {
         uid = `MBR-${generateId()}`
       } else {
-        const { nama, kelas, alamat, no_hp } = req.body
+        const { nisn, nama, kelas, alamat, no_hp, tempat, tanggal_lahir, password } = req.body
+        let userPassword
+        if (password === '' || password === null) {
+          userPassword = nisn
+        } else {
+          userPassword = password
+        }
         const response = await models.Member.create({
           member_id: uid,
+          nisn,
           nama,
           kelas,
           alamat,
           no_hp,
+          tempat,
+          tanggal_lahir,
+          password: userPassword
         })
         res.json({ msg: 'Member Berhasil Dibuat' })
       }
     } catch (err) {
-      res.json({ msg: err.toString() })
+      res.json({ msg: err.toString(), err })
     }
   },
 

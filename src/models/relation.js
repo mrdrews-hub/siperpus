@@ -1,10 +1,15 @@
 function bookRelation (sequelize, DataTypes) {
   const { Book, Rack, Categories, Borrowing, Transaction, Member, Stock } = sequelize.models
-  try {
-    Rack.hasMany(Book)
+    Rack.hasMany(Book, {
+      onDelete: 'RESTRICT',
+      onUpdate: 'RESTRICT'
+    })
     Book.belongsTo(Rack)
 
-    Categories.hasMany(Book)
+    Categories.hasMany(Book, {
+      onDelete: 'RESTRICT',
+      onUpdate: 'RESTRICT'
+    })
     Book.belongsTo(Categories)
 
     Book.hasMany(Stock)
@@ -18,11 +23,10 @@ function bookRelation (sequelize, DataTypes) {
     })
 
     Book.hasMany(Borrowing, {
-      onDelete: 'RESTRICT'
+      onDelete: 'RESTRICT',
+      onUpdate: 'RESTRICT'
     })
-    Borrowing.belongsTo(Book, {
-      onDelete: 'RESTRICT'
-    })
+    Borrowing.belongsTo(Book)
 
     Transaction.hasMany(Borrowing)
     Borrowing.belongsTo(Transaction)
@@ -68,9 +72,6 @@ function bookRelation (sequelize, DataTypes) {
     // MemberTransaction.belongsTo(Borrowing);
     // Member.hasMany(MemberTransaction);
     // Borrowing.hasMany(MemberTransaction);
-  } catch (err) {
-    console.log(err.message)
-  }
 }
 
 module.exports = { bookRelation }
