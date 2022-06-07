@@ -45,9 +45,9 @@
           style="vertical-align:middle"
         >
           <span class="text--primary font-weight-semibold mb-n1">
-            {{  'Yahaha' }}
+            {{ store.state.user.username || store.state.user.nama}}
           </span>
-          <small class="text--disabled text-capitalize">{{ 'User' }}</small>
+          <small class="text--disabled text-capitalize">{{ store.state.user.role }}</small>
         </div>
       </div>
 
@@ -100,7 +100,8 @@ export default {
     const store = context.root.$store
     const router = context.root.$router
     function handleLogout() {
-      localStorage.removeItem('token')
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('user')
       store.commit('SET_USER', {})
       router.push({ name: 'Login' })
     }

@@ -79,6 +79,50 @@
               </v-icon>
             </v-btn>
           </template>
+
+          <template v-slot:footer.prepend>
+            <v-row>
+              <v-col cols="4" class="mx-4">
+                <v-dialog
+                  ref="dialog"
+                  v-model="menu"
+                  :return-value.sync="date"
+                  persistent
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="date"
+                      label="Filter By"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="date"
+                    scrollable
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="menu = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.dialog.save(date)"
+                    >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-dialog>
+              </v-col>
+            </v-row>
+          </template>
         </v-data-table>
       </v-col>
       <v-col cols="12">
@@ -120,7 +164,7 @@ export default defineComponent({
     components: { AddBorrowForm, EditBorrowForm, DetailBorrow },
     setup() {
     const headers = ref([
-      { text: 'id_transaki', value: 'id_transaksi' },
+      { text: 'id_transaksi', value: 'id_transaksi' },
       { text: 'Nama Peminjam', value: 'Member.nama' },
       { text: 'Buku Dipinjam', value: 'Borrowings.length', align: 'center' },
       { text: 'Tanggal Pinjam', value: 'tgl_pinjam' },
@@ -134,10 +178,18 @@ export default defineComponent({
     const detailDialog = ref(false)
     const borrows = ref()
     const editData = ref()
+    const menu = ref(false)
+    const date = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10))
 
     const getBorrowingData = async () => {
       const response = await axios.get('/borrow')
-      borrows.value = response.data.Transaction
+      console.log(response);
+      if (response.data.error) {
+        alert('Server Error! Cannot GET Transaction')
+      } else {
+        const borrowActive = response.data.Transaction.filter(tr => tr.dikembalikan === 'false')
+        borrows.value = borrowActive
+      }
     }
 
     const sendData = (item, to = null) => {
@@ -206,11 +258,14 @@ export default defineComponent({
         hitungHari,
         detailDialog,
         deleteBorrows,
+        menu,
+        date
     }
 
     },
 })
 </script>
+
 <style scoped>
 
 </style>

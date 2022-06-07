@@ -89,7 +89,7 @@
 // eslint-disable-next-line object-curly-newline
 import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import VueRouter from 'vue-router'
@@ -128,7 +128,7 @@ export default {
             position: 'top-right',
             timer: 600,
           })
-          // router.push({ name: 'dashboard' }).catch(err => console.log(err))
+          router.push({ name: 'dashboard' }).catch(err => console.log(err))
         } catch (err) {
           Swal.fire({
             icon: 'warning',
@@ -160,7 +160,7 @@ export default {
             timer: 600,
           })
           loading.value = false
-          // router.push({ name: 'dashboard' }).catch(err => console.log(err))
+          router.push({ name: 'member.dashboard' }).catch(err => console.log(err))
         } catch (err) {
           Swal.fire({
             icon: 'warning',

@@ -38,6 +38,7 @@
     "apexcharts": "^3.27.3",
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
+    "html2pdf.js": "^0.10.1",
     "html5-qrcode": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",

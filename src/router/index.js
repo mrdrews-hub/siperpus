@@ -32,7 +32,47 @@ const isLogin = (to, from, next) => {
 const routes = [
   {
     path: '/',
-    redirect: '/pages/login',
+    redirect: '/login',
+  },
+  {
+    path: '/member/dashboard',
+    name: 'member.dashboard',
+    component: () => import('@/views/MemberPages/Dashboard.vue'),
+    meta: {
+      layout: 'member',
+    },
+  },
+  {
+    path: '/member/books',
+    name: 'member.book',
+    component: () => import('@/views/MemberPages/BooksPage.vue'),
+    meta: {
+      layout: 'member',
+    },
+  },
+  {
+    path: '/member/peminjaman',
+    name: 'member.peminjaman',
+    component: () => import('@/views/MemberPages/PeminjamanPage.vue'),
+    meta: {
+      layout: 'member',
+    },
+  },
+  {
+    path: '/member/history',
+    name: 'member.history',
+    component: () => import('@/views/MemberPages/HistoryPage.vue'),
+    meta: {
+      layout: 'member',
+    },
+  },
+  {
+    path: '/member/account-settings',
+    name: 'member.account-settings',
+    component: () => import('@/views/MemberPages/AccountSettings.vue'),
+    meta: {
+      layout: 'member',
+    },
   },
   {
     path: '/dashboard',
@@ -108,24 +148,61 @@ const routes = [
     },
   },
   {
+    path: '/pelanggaran',
+    name: 'pelanggaran',
+    component: () => import('@/views/Pelanggaran/PenaltyPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/report',
+    name: 'report',
+    component: () => import('@/views/Report/ReportPage.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/report/member',
+    name: 'report.member',
+    component: () => import('@/views/Report/ReportMember.vue'),
+    meta: {
+      requiresAuth: true,
+      layout: 'blank'
+    },
+  },
+  {
+    path: '/report/borrow',
+    name: 'report.borrow',
+    component: () => import('@/views/Report/ReportBorrow.vue'),
+    meta: {
+      requiresAuth: true,
+      layout: 'blank'
+    },
+  },
+  {
+    path: '/report/book',
+    name: 'report.book',
+    component: () => import('@/views/Report/ReportBook.vue'),
+    meta: {
+      requiresAuth: true,
+      layout: 'blank'
+    },
+  },
+  // {
+  //   path: '/report/member',
+  //   name: 'report.member',
+  //   component: () => import('@/views/Report/ReportMember.vue'),
+  //   meta: {
+  //     requiresAuth: true,
+  //     layout: 'blank'
+  //   },
+  // },
+  {
     path: '/icons',
     name: 'icons',
     component: () => import('@/views/icons/Icons.vue'),
-  },
-  {
-    path: '/cards',
-    name: 'cards',
-    component: () => import('@/views/cards/Card.vue'),
-  },
-  {
-    path: '/simple-table',
-    name: 'simple-table',
-    component: () => import('@/views/simple-table/SimpleTable.vue'),
-  },
-  {
-    path: '/form-layouts',
-    name: 'form-layouts',
-    component: () => import('@/views/form-layouts/FormLayouts.vue'),
   },
   {
     path: '/pages/account-settings',
@@ -133,18 +210,10 @@ const routes = [
     component: () => import('@/views/pages/account-settings/AccountSettings.vue'),
   },
   {
-    path: '/pages/login',
+    path: '/login',
     name: 'Login',
     beforeEnter: isLogin,
-    component: () => import('@/views/pages/Login.vue'),
-    meta: {
-      layout: 'blank',
-    },
-  },
-  {
-    path: '/pages/register',
-    name: 'Register',
-    component: () => import('@/views/pages/Register.vue'),
+    component: () => import('@/views/Login.vue'),
     meta: {
       layout: 'blank',
     },

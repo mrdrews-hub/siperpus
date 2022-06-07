@@ -22,6 +22,15 @@
           dense
           class="elevation-1 flex"
         >
+        <template v-slot:item.Penalties="{ item }">
+          <v-chip
+            :color="getColorStatus(item.Penalties.length > 0)"
+            small
+            dark
+          >
+          {{ item.Penalties.length > 0 ? 'Penalty' : 'Active' }}
+          </v-chip>
+        </template>
           <template v-slot:top>
             <v-toolbar
               flat
@@ -69,7 +78,7 @@
         </v-data-table>
       </v-col>
       <v-col cols="12">
-        <EditCategoryForm
+        <EditMemberForm
           v-if="editDialog"
           :editDialog="editDialog"
           :loading="loading"
@@ -77,7 +86,7 @@
           @save="editMember"
           @close="closeDialog"
         />
-        <AddCategoryForm
+        <AddMemberForm
           v-if="tambahDialog"
           :tambahDialog="tambahDialog"
           :loading="loading"
@@ -96,11 +105,11 @@ import Swal from 'sweetalert2'
 import {
   reactive, ref, onMounted, computed, watch, nextTick,
 } from '@vue/composition-api'
-import EditCategoryForm from './EditMemberForm.vue'
-import AddCategoryForm from './AddMemberForm.vue'
+import EditMemberForm from './EditMemberForm.vue'
+import AddMemberForm from './AddMemberForm.vue'
 
 export default {
-  components: { EditCategoryForm, AddCategoryForm },
+  components: { EditMemberForm, AddMemberForm },
   setup(props, context) {
     const headers = ref([
       { text: 'ID', value: 'member_id' },
@@ -108,6 +117,7 @@ export default {
       { text: 'Kelas', value: 'kelas' },
       { text: 'Alamat', value: 'alamat' },
       { text: 'No HP', value: 'no_hp' },
+      { text: 'Status', value: 'Penalties' },
       { text: 'Actions', value: 'actions', sortable: false },
     ])
     const search = ref('')
@@ -140,15 +150,8 @@ export default {
 
     const addMember = async (payload) => {
       loading.value = true
-      const membersData = {
-        nama: payload.nama,
-        kelas: payload.kelas,
-        alamat: payload.alamat,
-        no_hp: payload.no_hp
-      }
       try {
         const { data, status, statusText } = await axios.post('/members/create', payload)
-        console.log({ data, status, statusText })
         if (data.error) {
           Swal.fire({
             icon: 'error',
@@ -165,7 +168,6 @@ export default {
           })
           loading.value = false
           closeDialog()
-          getData()
         }
       } catch (err) {
         console.log(err.toString())
@@ -205,7 +207,7 @@ export default {
       }
       try {
         loading.value = true
-        const { data } = await axios.put(`/members/edit/${payload.id}`, membersEdited)
+        const { data } = await axios.put(`/members/edit/${payload.id}`, payload)
         if (data.error) {
           Swal.fire({
             icon: 'error',
@@ -223,7 +225,6 @@ export default {
           })
           loading.value = false
           closeDialog()
-          getData()
         }
       } catch (err) {
         console.log(err.message)
@@ -234,6 +235,12 @@ export default {
     const closeDialog = () => {
       tambahDialog.value = false
       editDialog.value = false
+      getData()
+    }
+
+    const getColorStatus = (status) => {
+        if (status) return 'error'
+        else return 'success'
     }
 
     return {
@@ -250,6 +257,7 @@ export default {
       closeDialog,
       editMember,
       search,
+      getColorStatus
     }
   },
 }

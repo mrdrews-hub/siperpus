@@ -8,6 +8,9 @@
 .bg-gradient-primary {
   background: linear-gradient(98deg, #c48eff, var(--v-primary-base) 94%);
 }
+.bg-gradient-success {
+  background: linear-gradient(98deg, #8efffb, var(--v-primary-base) 90%);
+}
 
 @include theme--child(bg-card) using ($material) {
   background-color: map-deep-get($material, 'cards');

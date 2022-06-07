@@ -12,7 +12,7 @@
             dark
             color="accent"
           >
-            <v-toolbar-title>Add Stock</v-toolbar-title>
+            <v-toolbar-title>Add Penalty</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn
@@ -30,25 +30,23 @@
               <v-row>
                 <v-col cols="12">
                   <v-dialog
-                    max-width="700"
-                    persistent
-                    v-model="bookDialog">
+                    max-width="600"
+                    v-model="memberDialog">
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        :prepend-inner-icon="icon.mdiMagnify"
-                        label="Pilih Buku"
-                        readonly
-                        solo
+                        :prepend-inner-icon="icon.mdiAccountSearch"
+                        label="Pilih Member"
                         outlined
+                        filled
+                        readonly
                         v-bind="attrs"
                         v-on="on"
-                      >
-                      </v-text-field>
+                      ></v-text-field>
                     </template>
                     <v-card>
                       <v-card-title class="flex justify-end">
                         <v-btn
-                          @click="bookDialog = false"
+                          @click="memberDialog = false"
                           fab>
                           <v-icon
                             color="error"
@@ -59,120 +57,90 @@
                       </v-card-title>
                       <v-card-text>
                         <v-text-field
-                          v-model="searchBook"
-                          :prepend-inner-icon="icon.mdiBookSearch"
-                          label="Cari Buku"
+                          v-model="searchMember"
+                          label="Cari Member"
                           outlined
                           filled
                           rounded
                         ></v-text-field>
                         <v-data-table
-                          v-model="selectedBook"
-                          :headers="bookHeader"
-                          :items="books"
-                          :search="searchBook"
-                          item-key="title"
+                          v-model="selectedMember"
+                          :headers="memberHeader"
+                          :items="members"
+                          :search="searchMember"
+                          item-key="member_id"
                           show-select
                           single-select
                           checkbox-color="accent"
                         >
                         </v-data-table>
                       </v-card-text>
-                      <v-card-actions class="flex justify-end">
-                        <v-btn
-                          color="primary"
-                          elevation="3"
-                          rounded
-                          @click="bookDialog = false"
-                        >
-                          Save
-                        </v-btn>
-                      </v-card-actions>
                     </v-card>
                   </v-dialog>
                 </v-col>
               </v-row>
-              <v-row v-if="selectedBook.length > 0">
-                <v-col cols="4">
+              <v-row v-if="selectedMember.length > 0">
+                <v-col cols="12">
                   <v-text-field
-                    label="Judul Buku"
+                    label="NIS"
                     readonly
                     filled
                     outlined
-                    :value="selectedBook[0].title"
+                    :value="selectedMember[0].nisn"
                   >
                   </v-text-field>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="6">
                   <v-text-field
-                    label="Author"
+                    label="Nama Member"
                     readonly
                     filled
                     outlined
-                    :value="selectedBook[0].author"
+                    :value="selectedMember[0].nama"
                   >
                   </v-text-field>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="6">
                   <v-text-field
-                    label="Penerbit"
+                    label="Kelas"
                     readonly
                     filled
                     outlined
-                    :value="selectedBook[0].penerbit"
+                    :value="selectedMember[0].kelas"
                   >
                   </v-text-field>
                 </v-col>
-                <v-col cols="8">
+                <v-col cols="12">
                   <v-text-field
-                    label="ISBN"
+                    label="No HP"
                     readonly
                     filled
                     outlined
-                    :value="selectedBook[0].isbn"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    label="Initial Stock"
-                    readonly
-                    filled
-                    outlined
-                    :value="selectedBook[0].stock"
+                    :value="selectedMember[0].no_hp"
                   >
                   </v-text-field>
                 </v-col>
               </v-row>
               <hr class="mb-4">
-              <v-row v-if="selectedBook.length > 0">
+              <v-row v-if="selectedMember.length > 0">
                 <v-col cols="6">
-                  <v-select
-                    v-model="form.status"
-                    :items="['tambah', 'kurangi']"
-                    :error-messages="v$.status.$error ? v$.status.$errors[0].$message : null"
+                  <v-text-field
+                    v-model="form.jenisP"
+                    :error-messages="v$.jenisP.$error ? v$.jenisP.$errors[0].$message : null"
                     filled
                     outlined
-                    label="Tipe"
-                  ></v-select>
+                    label="Jenis Pelanggaran"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
-                    v-model="form.jumlah"
-                    label="Jumlah"
-                    :error-messages="v$.jumlah.$error ? v$.jumlah.$errors[0].$message : null"
+                    v-model="form.denda"
+                    label="Nominal Denda"
+                    :error-messages="v$.denda.$error ? v$.denda.$errors[0].$message : null"
                     filled
                     outlined
                     type="number"
                   ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-textarea
-                    v-model="form.info"
-                    label="Keterangan"
-                    filled
-                    outlined
-                  ></v-textarea>
                 </v-col>
               </v-row>
             </v-container>
@@ -200,9 +168,10 @@
     </v-col>
   </v-row>
 </template>
+
 <script>
 import { defineComponent, onMounted, reactive, ref, computed } from '@vue/composition-api'
-import { mdiImage, mdiClose, mdiCloseBox, mdiMagnify, mdiBookSearch } from '@mdi/js'
+import { mdiImage, mdiClose, mdiCloseBox, mdiMagnify, mdiBookSearch, mdiAccountSearch } from '@mdi/js'
 import useValidate from '@vuelidate/core'
 import { required, helpers, maxLength } from '@vuelidate/validators'
 import axios from 'axios'
@@ -213,66 +182,71 @@ export default defineComponent({
     dialog: Boolean
   },
   setup(props, ctx) {
-    const form = reactive({
-      status: '',
-      jumlah: null,
-      info: '',
-    })
-    const bookDialog = ref(false)
-    const bookHeader = ref([
-      { text: 'Judul', value: 'title' },
-      { text: 'Author', value: 'author' },
-      { text: 'Tahun', value: 'years' },
-      { text: 'Stock', value: 'stock' },
+    const memberHeader = ref([
+      { text: 'ID MEMBER', value: 'member_id' },
+      { text: 'Nama', value: 'nama' },
+      { text: 'Kelas', value: 'kelas' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ])
-    const books = ref([])
-    const searchBook = ref('')
-    const selectedBook = ref([])
+    const memberDialog = ref(false)
+    const searchMember = ref('')
+    const selectedMember = ref([])
+    const members = ref()
+    const form = reactive({
+      jenisP: '',
+      denda: '',
+    })
     const validator = computed(() => {
       return {
-        status: {
+        jenisP: {
           required: helpers.withMessage('Tidak Boleh Kosong!', required),
         },
-        jumlah: {
+        denda: {
           required: helpers.withMessage('Tidak Boleh Kosong!', required),
         },
       }
     })
     const v$ = useValidate(validator, form)
-    const getBooksData = async () => {
-      try{
-        const response = await axios.get('/books')
-        books.value = response.data.books
+
+    const getMember = async () => {
+      try {
+        const response = await axios.get('/members')
+        if (response.data.error) {
+          console.log(response);
+        } else {
+          members.value = response.data.members
+        }
       } catch (err) {
-        console.log('Cannot GET Books', err.toString());
+        console.log(err.toString());
       }
     }
 
     onMounted(() => {
-      getBooksData()
+      getMember()
       v$.value.$validate()
     })
 
     const close = () => {
       ctx.emit('close')
     }
-
     const save = async () => {
       const reqBody = {
-        bookId: selectedBook.value[0].id,
-        status: form.status,
-        jumlah: form.jumlah,
-        info: form.info,
+        MemberId: selectedMember.value[0].id,
+        jenis: form.jenisP,
+        denda: form.denda,
       }
-      const response = await axios.post('/stock/add', reqBody)
+      const response = await axios.post('/penalties/create', reqBody)
+
       if (response.data.error) {
         Swal.fire({
           icon: 'error',
-          title: response.data.msg
+          title: 'error',
+          text: response.data.msg
         })
       } else {
         Swal.fire({
           toast: true,
+          position: 'top-right',
           icon: 'success',
           title: response.data.msg
         })
@@ -280,17 +254,24 @@ export default defineComponent({
       }
     }
 
+    const tambahMember = (item) => {
+      console.log(item);
+      //   form.member = { id: item.id, member_id: item.member_id, nama: item.nama }
+      memberDialog.value = false
+    }
+
     return {
-      icon: { mdiImage, mdiClose, mdiCloseBox, mdiMagnify, mdiBookSearch },
+      icon: { mdiImage, mdiClose, mdiCloseBox, mdiMagnify, mdiBookSearch, mdiAccountSearch },
       form,
-      books,
+      memberHeader,
+      memberDialog,
+      members,
+      searchMember,
+      selectedMember,
       close,
+      tambahMember,
       save,
       v$,
-      selectedBook,
-      bookDialog,
-      searchBook,
-      bookHeader
     }
   },
 })

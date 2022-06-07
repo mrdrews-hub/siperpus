@@ -11,11 +11,13 @@ import { computed, ref, watch } from '@vue/composition-api'
 import { useRouter } from '@/utils'
 import LayoutBlank from '@/layouts/Blank.vue'
 import LayoutContent from '@/layouts/Content.vue'
+import LayoutMember from '@/layouts/MemberContent.vue'
 
 export default {
   components: {
     LayoutBlank,
     LayoutContent,
+    LayoutMember
   },
   setup(props, context) {
     const { route } = useRouter()
@@ -24,6 +26,8 @@ export default {
       if (route.value.name === null) return null
 
       if (route.value.meta.layout === 'blank') return 'layout-blank'
+
+      if (route.value.meta.layout === 'member') return 'layout-member'
 
       return 'layout-content'
     })

@@ -25,13 +25,13 @@
         ></v-img>
         <v-slide-x-transition>
           <h2 class="app-title text--primary">
-            SIPERPUS
+            MEMBER
           </h2>
         </v-slide-x-transition>
       </router-link>
     </div>
 
-    <!-- Navigation Admin -->
+    <!-- Navigation Member -->
     <v-list
       expand
       shaped
@@ -39,78 +39,37 @@
     >
       <nav-menu-link
         title="Dashboard"
-        :to="{ name: 'dashboard' }"
+        :to="{ name: 'member.dashboard' }"
         :icon="icons.mdiHomeOutline"
       ></nav-menu-link>
+
       <nav-menu-link
-        title="Rack"
-        :to="{ name: 'rack' }"
-        :icon="icons.mdiBookshelf"
+        title="Books"
+        :to="{ name: 'member.book' }"
+        :icon="icons.mdiBookCog"
       ></nav-menu-link>
+
       <nav-menu-link
-        title="Categories"
-        :to="{ name: 'categories' }"
-        :icon="icons.mdiShapePlus"
+        title="Peminjaman"
+        :to="{ name: 'member.peminjaman' }"
+        :icon="icons.mdiBookCog"
       ></nav-menu-link>
+
       <nav-menu-link
-        title="Members"
-        :to="{ name: 'members' }"
-        :icon="icons.mdiAccountGroup"
+        title="History"
+        :to="{ name: 'member.history' }"
+        :icon="icons.mdiBookClock"
       ></nav-menu-link>
+      <nav-menu-section-title title="Setting"></nav-menu-section-title>
       <nav-menu-link
-        title="Pelanggaran"
-        :to="{ name: 'pelanggaran' }"
-        :icon="icons.mdiAlert"
-      ></nav-menu-link>
-      <v-list-group
-        :value="true"
-        :prepend-icon="icons.mdiBookOpen"
-      >
-        <template v-slot:activator>
-          <v-list-item-title>Books</v-list-item-title>
-        </template>
-        <nav-menu-link
-          class="ml-4"
-          title="List Books"
-          :to="{ name: 'books' }"
-          :icon="icons.mdiBookCog"
-        ></nav-menu-link>
-        <nav-menu-link
-          class="ml-4"
-          title="Stock"
-          :to="{ name: 'stocks' }"
-          :icon="icons.mdiBookPlus"
-        ></nav-menu-link>
-        <nav-menu-link
-          class="ml-4"
-          title="Borowing"
-          :to="{ name: 'borowing' }"
-          :icon="icons.mdiBookClock"
-        ></nav-menu-link>
-        <nav-menu-link
-          class="ml-4"
-          title="Return"
-          :to="{ name: 'return' }"
-          :icon="icons.mdiBookCheck"
-        ></nav-menu-link>
-      </v-list-group>
-      <nav-menu-link
-        title="Report"
-        :to="{ name: 'report' }"
-        :icon="icons.mdiFileTable"
-      ></nav-menu-link>
-      <nav-menu-section-title title="Root"></nav-menu-section-title>
-      <nav-menu-link
-        title="Users"
-        :to="{ name: 'users' }"
-        :icon="icons.mdiAccountKey"
+        title="Account Settings"
+        :to="{ name: 'member.account-settings'}"
+        :icon="icons.mdiAccountCogOutline"
       ></nav-menu-link>
     </v-list>
     <!-- END -->
-
   </v-navigation-drawer>
 </template>
-
 <script>
 // eslint-disable-next-line object-curly-newline
 import {
@@ -129,8 +88,7 @@ import {
   mdiFormSelect,
   mdiAccountCogOutline,
   mdiFileTable,
-  mdiBookPlus,
-  mdiAlert
+  mdiBookPlus
 } from '@mdi/js'
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue'
 import NavMenuGroup from './components/NavMenuGroup.vue'
@@ -170,7 +128,6 @@ export default {
         mdiFileOutline,
         mdiFormSelect,
         mdiAccountCogOutline,
-        mdiAlert
       },
     }
   },

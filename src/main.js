@@ -11,6 +11,14 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 
 Vue.config.productionTip = false
 
+window.onload = () => {
+  const user = sessionStorage.getItem('user')
+  if (user) {
+    const userParsed = JSON.parse(user)
+    // console.log(userParsed);
+  }
+}
+
 axios.defaults.baseURL = 'http://localhost:3030/api'
 new Vue({
   store,
