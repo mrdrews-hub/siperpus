@@ -6,6 +6,8 @@ const CategoriesRoutes = require('./Categories/categories.routes')
 const MemberRoutes = require('./Member/member.routes')
 const BorrowRoutes = require('./Borrows/borrow.routes')
 const StockRoutes = require('./Stock/stock.routes')
+const PenaltiesRoutes = require('./Pelanggaran/penalty.routes')
+const ReportRoutes = require('./Report/report.routes')
 const authenticate = require('../helpers/verifyToken')
 
 router.use('/auth', AuthRoutes)
@@ -15,5 +17,7 @@ router.use('/categories', CategoriesRoutes)
 router.use('/members', MemberRoutes)
 router.use('/borrow', BorrowRoutes)
 router.use('/stock', StockRoutes)
+router.use('/penalties', PenaltiesRoutes)
+router.use('/report', ReportRoutes)
 
 module.exports = router

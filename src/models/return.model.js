@@ -1,19 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('Return', {
-      id_transaksi: {
-        type: DataTypes.STRING,
-        unique: true
-      },
-      tgl_pinjam: {
-        type: DataTypes.DATEONLY,
-        default: Date.now()
-      },
-      tgl_kembali: {
+      returnAt: {
         type: DataTypes.DATEONLY
       },
-      denda: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0
-      }
     }, { timestamps: false })
   }

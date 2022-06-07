@@ -38,7 +38,7 @@ const BorrowController = {
 					},
 					{
 						model: models.Member
-					}
+					},
 			],
         where: {
           // [Op.or]: [{ id: req.params.id }, { id_transaksi: req.params.id }],
@@ -61,12 +61,23 @@ const BorrowController = {
 					},
 					{
 						model: models.Member
-					}
+					},
+          {
+            model: models.Return
+          }
 			]
 			})
       res.status(200).json({ error: false, Transaction })
     } catch (err) {
-      res.status(500).json({ error: true, msg: err.message })
+      res.status(200).json({ error: true, err })
+    }
+  },
+
+  async getReturnDetail() {
+    try {
+      
+    } catch (err) {
+      
     }
   },
 
@@ -188,8 +199,35 @@ const BorrowController = {
     }
   },
 
+  async returnBorrow (req, res, next) {
+    try {
+      const books = await models.Borrowing.findAll({
+        where: { TransactionId: req.params.id }
+      })
+      for (let book of books) {
+        await models.Book.increment({ stock: 1 }, { where: { id: book.BookId } })
+      }
+      const updateTransaction = await models.Transaction.update({
+        dikembalikan: 'true'
+      }, { where: { id: req.params.id } })
+      const createReturn = await models.Return.create({
+        TransactionId: req.params.id,
+        returnAt: new Date().toISOString().substr(0, 10)
+      })
+      res.json({ msg: 'Sukses! Buku berhasil Dikembalikan' })
+    } catch (err) {
+      res.json({ error: true, msg: err.toString() })
+    }
+  },
+
   async deleteBorrow (req, res, next) {
     try {
+      const books = await models.Borrowing.findAll({
+        where: { TransactionId: req.params.id }
+      })
+      for (let book of books) {
+        await models.Book.increment({ stock: 1 }, { where: { id: book.BookId } })
+      }
       const deleteTransaction = await models.Transaction.destroy({
         where: { id: req.params.id }
       })

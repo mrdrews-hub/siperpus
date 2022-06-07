@@ -18,6 +18,10 @@ module.exports = function (sequelize, DataTypes) {
     dikembalikan: {
       type: DataTypes.STRING(5),
       defaultValue: 'false'
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY,
+      defaultValue: new Date().toISOString().substr(0, 10)
     }
   }, { timestamps: false })
 }

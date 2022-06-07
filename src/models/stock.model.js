@@ -10,6 +10,10 @@ module.exports = function (sequelize, DataTypes) {
     },
     info: {
       type: DataTypes.TEXT
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY,
+      defaultValue: new Date().toISOString().substr(0, 10)
     }
-  })
+  }, { timestamps: false })
 }

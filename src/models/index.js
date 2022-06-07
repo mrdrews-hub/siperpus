@@ -18,6 +18,8 @@ const models = [
   require('./borrowing.model'),
   require('./transaction.model'),
   require('./stock.model'),
+  require('./penalty.model'),
+  require('./return.model'),
 ]
 for (const model of models) {
   model(sequelize, DataTypes)
@@ -26,11 +28,12 @@ for (const model of models) {
 bookRelation(sequelize, DataTypes)
 
 // Get any model for sync purpose
-const { Rack, Book, Borrowing, Member, Transaction, Stock } = sequelize.models
-Member.sync({ force: true })
-// sequelize.sync()
+const { Rack, Book, Borrowing, Member, Transaction, Stock, Penalty, Return } = sequelize.models
+// Penalty.sync({ force: true })
+sequelize.sync()
+// Transaction.sync({ force:true })
 // Book.sync({ force: true })
-// Transaction.sync({ force: true })
+// Return.sync({ force: true })
 // Stock.sync({ force: true })
 
 module.exports = sequelize

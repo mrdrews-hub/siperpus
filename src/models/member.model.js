@@ -32,6 +32,10 @@ module.exports = function (sequelize, DataTypes) {
     role: {
       type: DataTypes.STRING(6),
       defaultValue: 'member'
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY,
+      defaultValue: new Date().toISOString().substr(0, 10)
     }
-  })
+  }, { timestamps: false })
 }

@@ -10,7 +10,7 @@ const MemberController = {
     try {
       const data = await models.Member.findAll({
         include: [
-          { model: models.Transaction }
+          { model: models.Penalty }
         ]
       })
       res.json({ members: data })
@@ -22,6 +22,10 @@ const MemberController = {
   async getDetailMember (req, res, next) {
     try {
       const data = await models.Member.findOne({
+        include: [
+          { model: models.Transaction },
+          { model: models.Penalty }
+        ],
         where: { member_id: req.params.id }
       })
       res.json({ data })
@@ -83,7 +87,8 @@ const MemberController = {
           no_hp,
           tempat,
           tanggal_lahir,
-          password: userPassword
+          password: userPassword,
+          createdAt: new Date('2022-01-03').toISOString().substr(0, 10)
         })
         res.json({ msg: 'Member Berhasil Dibuat' })
       }
@@ -95,12 +100,7 @@ const MemberController = {
   async updateMember (req, res, next) {
     try {
       const { nama, kelas, alamat, no_hp } = req.body
-      const response = await models.Member.update({
-        nama,
-        kelas,
-        alamat,
-        no_hp,
-      }, { where: { id: req.params.id } })
+      const response = await models.Member.update(req.body, { where: { id: req.params.id } })
       res.json({ msg: 'Member Berhasil DiEdit' })
     } catch (err) {
       res.json({ msg: err.toString() })

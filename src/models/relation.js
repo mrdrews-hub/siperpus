@@ -1,5 +1,5 @@
 function bookRelation (sequelize, DataTypes) {
-  const { Book, Rack, Categories, Borrowing, Transaction, Member, Stock } = sequelize.models
+  const { Book, Rack, Categories, Borrowing, Transaction, Member, Stock, Penalty, Return } = sequelize.models
     Rack.hasMany(Book, {
       onDelete: 'RESTRICT',
       onUpdate: 'RESTRICT'
@@ -33,6 +33,12 @@ function bookRelation (sequelize, DataTypes) {
 
     Member.hasMany(Transaction)
     Transaction.belongsTo(Member)
+
+    Member.hasMany(Penalty)
+    Penalty.belongsTo(Member)
+
+    Transaction.hasOne(Return)
+    Return.belongsTo(Transaction)
 
     // Member.belongsToMany(Book, { through: Borrowing })
     // Book.belongsToMany(Member, { through: Borrowing })
