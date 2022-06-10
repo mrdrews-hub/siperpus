@@ -23,7 +23,7 @@ const BorrowController = {
       const diffDays = Math.round(Math.round((tgl_kembali - hariIni) / (oneDay)));
 
       const hargaSewaBuku = 0
-      const dendaPerHari = 10000
+      const dendaPerHari = 1000
       let totalHarga = 0
       if (diffDays < 0) {
         totalHarga += hargaSewaBuku + dendaPerHari * Math.abs(diffDays)
