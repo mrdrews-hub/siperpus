@@ -12,7 +12,7 @@
             </div>
         </header>
         <hr><hr>
-    <h2 style="text-align: center; margin-top: 12px;">PERIODE GENAP 2022/2023</h2>
+    <h3 style="text-align: center; margin-top: 12px;">PERIODE {{ parseDate(tglAwalReport) }} sampai {{ parseDate(tglAkhirReport) }}</h3>
       <table class="table">
         <thead>
           <tr>
@@ -37,6 +37,14 @@
           </tr>
         </tbody>
       </table>
+      <div class="paraf">
+        <div class="paraf-header">
+         <p style="text-align: center; margin-bottom: -2px;">Tasikmalaya, {{ parseDate(Date.now()) }}</p>
+         <p style="text-align: center;">Kepala Perpustakaan</p>
+        </div>
+
+        <p style="text-align: center; margin-top: 58px;">Teti Nurhayati, S.Pd</p>
+      </div>
     </div>
   </section>
 </template>
@@ -44,6 +52,7 @@
 import { onMounted, ref, onBeforeMount } from '@vue/composition-api'
 import html2pdf from 'html2pdf.js'
 import axios from 'axios'
+import { parseDate } from '@/utils'
 
 export default {
 //   props: {
@@ -52,6 +61,8 @@ export default {
   setup (props, ctx) {
     const route = ctx.root.$route
     const books = ref([])
+    const tglAwalReport = route.query.tgl_mulai
+    const tglAkhirReport = route.query.tgl_akhir
 
     onMounted(async () => {
     const response = await axios.post('/report/books', {
@@ -59,16 +70,16 @@ export default {
         tgl_akhir: route.query.tgl_akhir,
     })
      if (response.data.error) {
-         alert('terjadi kesalahan')
+        alert('terjadi kesalahan')
      } else {
-         books.value = response.data
+        books.value = response.data
         const element = document.getElementById('report');
         const opt = {
-        margin: 0.5,
-        filename: 'laporan-buku.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 1 },
-        jsPDF: { unit: 'in', format: 'legal', orientation: 'portrait' }
+          margin: 0.5,
+          filename: 'laporan-buku.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 1 },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         }
         html2pdf().set(opt).from(element).save();
      }
@@ -76,6 +87,9 @@ export default {
 
     return {
       books,
+      parseDate,
+      tglAwalReport,
+      tglAkhirReport,
     }
   }
 }
@@ -84,6 +98,10 @@ export default {
 .sheet {
     margin: 0 auto;
     max-width: 1100px;
+}
+#report {
+  position: relative;
+  min-height: 125vh;
 }
 #report header {
     display: flex;
@@ -122,4 +140,9 @@ export default {
     .text-center {
         text-align: center;
     }
+.paraf {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
 </style>

@@ -5,7 +5,7 @@
         v-model="editDialog"
         persistent
         transition="dialog-bottom-transition"
-        max-width="600"
+        max-width="700"
       >
         <v-card>
           <v-card-title>
@@ -18,11 +18,11 @@
                   <v-text-field
                     v-model="form.nisn"
                     :error-messages="v$.nama.$error ? v$.nama.$errors[0].$message : null"
-                    label="NIS/NISN"
+                    :label="form.kelas == 'Guru' ? 'NIDN' : 'NIS'"
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12">
+                <v-col cols="6">
                   <v-text-field
                     v-model="form.nama"
                     :error-messages="v$.nama.$error ? v$.nama.$errors[0].$message : null"
@@ -30,7 +30,7 @@
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12">
+                <v-col cols="6">
                   <v-text-field
                     v-model="form.kelas"
                     label="Kelas"

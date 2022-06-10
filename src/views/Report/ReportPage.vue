@@ -152,6 +152,12 @@ export default {
         meta: 'peminjaman',
       },
       {
+        title: 'Laporan Pengembalian',
+        icon: mdiCalendar,
+        url: 'pengembalian',
+        meta: 'pengembalian',
+      },
+      {
         title: 'Laporan Buku',
         icon: mdiCalendar,
         url: 'buku',
@@ -182,6 +188,10 @@ export default {
       switch (urlReport.value) {
         case 'peminjaman':
           routeData = router.resolve({ name: 'report.borrow', query: { tgl_mulai: date1.value, tgl_akhir: date2.value } });
+          window.open(routeData.href, '_blank');
+          break;
+        case 'pengembalian':
+          routeData = router.resolve({ name: 'report.return', query: { tgl_mulai: date1.value, tgl_akhir: date2.value } });
           window.open(routeData.href, '_blank');
           break;
         case 'buku':

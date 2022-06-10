@@ -12,7 +12,7 @@
             </div>
         </header>
         <hr><hr>
-    <h2 style="text-align: center; margin-top: 12px;">PERIODE GENAP 2022/2023</h2>
+    <h2 style="text-align: center; margin-top: 12px;">PERIODE {{ parseDate(tglAwalReport) }} sampai {{ parseDate(tglAkhirReport) }}</h2>
       <table class="table">
         <thead>
           <tr>
@@ -39,6 +39,14 @@
           </tr>
         </tbody>
       </table>
+      <div class="paraf">
+        <div class="paraf-header">
+         <p style="text-align: center; margin-bottom: -2px;">Tasikmalaya, {{ parseDate(Date.now()) }}</p>
+         <p style="text-align: center;">Kepala Perpustakaan</p>
+        </div>
+
+        <p style="text-align: center; margin-top: 58px;">Teti Nurhayati, S.Pd</p>
+      </div>
     </div>
   </section>
 </template>
@@ -46,6 +54,7 @@
 import { onMounted, ref, onBeforeMount } from '@vue/composition-api'
 import html2pdf from 'html2pdf.js'
 import axios from 'axios'
+import { parseDate } from '@/utils'
 
 export default {
 //   props: {
@@ -55,6 +64,9 @@ export default {
     const route = ctx.root.$route
     const borrows = ref([])
 
+    const tglAwalReport = route.query.tgl_mulai
+    const tglAkhirReport = route.query.tgl_akhir
+
     onMounted(async () => {
     const response = await axios.post('/report/borrow', {
         tgl_mulai: route.query.tgl_mulai,
@@ -63,21 +75,25 @@ export default {
      if (response.data.error) {
          alert('terjadi kesalahan')
      } else {
-         borrows.value = response.data
+       const borrowing = response.data.filter(borrow => borrow.dikembalikan === 'false')
+         borrows.value = borrowing
         const element = document.getElementById('report');
         const opt = {
         margin: 0.5,
         filename: 'laporan-peminjaman.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1 },
-        jsPDF: { unit: 'in', format: 'legal', orientation: 'portrait' }
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         }
-        html2pdf().set(opt).from(element).save();
+        // html2pdf().set(opt).from(element).save();
      }
     })
 
     return {
       borrows,
+      parseDate,
+      tglAwalReport,
+      tglAkhirReport
     }
   }
 }
@@ -124,4 +140,9 @@ export default {
     .text-center {
         text-align: center;
     }
+.paraf {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
 </style>

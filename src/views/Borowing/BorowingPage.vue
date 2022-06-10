@@ -57,7 +57,7 @@
                 {{ icon.mdiInformation }}
               </v-icon>
             </v-btn>
-            <v-btn
+            <!-- <v-btn
               fab
               small
               class="mr-3"
@@ -67,7 +67,7 @@
               <v-icon>
                 {{ icon.mdiPencil }}
               </v-icon>
-            </v-btn>
+            </v-btn> -->
             <v-btn
               fab
               small
@@ -126,14 +126,14 @@
         </v-data-table>
       </v-col>
       <v-col cols="12">
-        <edit-borrows-form
+        <!-- <edit-borrows-form
           v-if="editDialog"
           :editDialog="editDialog"
           :loading="loading"
           :data="editData"
           @save="saveEdit"
           @close="closeDialog"
-        />
+        /> -->
         <add-borrow-form
           v-if="tambahDialog"
           :tambahDialog="tambahDialog"

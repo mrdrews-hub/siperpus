@@ -21,7 +21,7 @@
                 <v-col cols="12">
                   <v-text-field
                     v-model="form.nisn"
-                    label="NIS / NISN"
+                    :label="form.kelas == 'Guru' ? 'NIDN' : 'NIS'"
                     :error-messages="v$.nisn.$error ? v$.nisn.$errors[0].$message : null"
                     filled
                     required
@@ -42,7 +42,7 @@
                   <v-combobox
                     v-model="form.kelas"
                     filled
-                    :items="['X ', 'XI ', 'XII ']"
+                    :items="['X ', 'XI ', 'XII ', 'Guru']"
                     hide-selected
                     outlined
                     label="Kelas"
@@ -50,6 +50,7 @@
                 </v-col>
                 <v-col cols="4">
                   <v-combobox
+                    v-if="form.kelas && form.kelas !== 'Guru'"
                     v-model="form.detailKelas"
                     filled
                     :items="listKelas"

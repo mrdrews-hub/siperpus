@@ -15,8 +15,8 @@
     </v-card-title>
 
     <v-card-subtitle class="mb-8 mt-n5">
-      <span class="font-weight-semibold text--primary me-1">Total 48.5% Growth</span>
-      <span>😎 this month</span>
+      <span class="font-weight-semibold text--primary me-1">Welcome Back </span>
+      <span>😎</span>
     </v-card-subtitle>
 
     <v-card-text>
@@ -58,34 +58,96 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiAccountOutline, mdiCurrencyUsd, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline } from '@mdi/js'
+import { onMounted, ref } from '@vue/composition-api'
+import { mdiAccountOutline, mdiRefresh, mdiBook, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline } from '@mdi/js'
+import axios from 'axios'
 
 export default {
   setup() {
-    const statisticsData = [
+    const statisticsData = ref([
       {
-        title: 'Sales',
-        total: '245k',
+        title: 'Peminjaman',
+        total: '0',
       },
       {
-        title: 'Customers',
-        total: '12.5k',
+        title: 'Pengembalian',
+        total: '0',
       },
       {
-        title: 'Product',
-        total: '1.54k',
+        title: 'Total Buku',
+        total: '0',
       },
       {
-        title: 'Revenue',
-        total: '$88k',
+        title: 'Member',
+        total: '0',
       },
-    ]
+    ])
+
+    const getPeminjaman = async () => {
+      try {
+        const response = await axios.get('/borrow')
+        if (response.data.error) {
+          statisticsData.value[0].total = 0
+        } else {
+          const totalPeminjaman = response.data.Transaction.filter(trx => trx.dikembalikan === 'false')
+          statisticsData.value[0].total = totalPeminjaman.length
+        }
+      } catch (error) {
+        console.log(error.toString());
+      }
+    }
+    const getPengembalian = async () => {
+      try {
+        const response = await axios.get('/borrow')
+        if (response.data.error) {
+          statisticsData.value[1].total = 0
+        } else {
+          const totalPengembalian = response.data.Transaction.filter(trx => trx.dikembalikan === 'true')
+          statisticsData.value[1].total = totalPengembalian.length
+        }
+      } catch (error) {
+        console.log(error.toString());
+      }
+    }
+    const getBook = async () => {
+      try {
+        const response = await axios.get('/books')
+        if (response.data.error) {
+          statisticsData.value[2].total = 0
+        } else {
+          const totalBuku = response.data.books
+          statisticsData.value[2].total = totalBuku.length
+        }
+      } catch (error) {
+        console.log(error.toString());
+      }
+    }
+    const getMember = async () => {
+      try {
+        const response = await axios.get('/members')
+        if (response.data.error) {
+          statisticsData.value[3].total = 0
+        } else {
+          const totalMembers = response.data.members
+          statisticsData.value[3].total = totalMembers.length
+        }
+      } catch (error) {
+        console.log(error.toString());
+      }
+    }
+
+    onMounted(() => {
+      getPeminjaman()
+      getPengembalian()
+      getBook()
+      getMember()
+    })
 
     const resolveStatisticsIconVariation = data => {
-      if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
-      if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' }
-      if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' }
-      if (data === 'Revenue') return { icon: mdiCurrencyUsd, color: 'info' }
+      if (data === 'Peminjaman') return { icon: mdiTrendingUp, color: 'primary' }
+      if (data === 'Pengembalian') return { icon: mdiRefresh, color: 'success' }
+      if (data === 'Total Buku') return { icon: mdiBook, color: 'warning' }
+      if (data === 'Member') return { icon: mdiAccountOutline, color: 'info' }
 
       return { icon: mdiAccountOutline, color: 'success' }
     }
@@ -100,7 +162,8 @@ export default {
         mdiTrendingUp,
         mdiAccountOutline,
         mdiLabelOutline,
-        mdiCurrencyUsd,
+        mdiRefresh,
+        mdiBook,
       },
     }
   },

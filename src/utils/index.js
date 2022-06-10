@@ -42,3 +42,26 @@ export const selisihHari = (date1, date2) => {
     return diffday
   }
 }
+
+export const parseDate = (date) => {
+  const bulanNumber = {
+    0: 'Januari',
+    1: 'Februari',
+    2: 'Maret',
+    3: 'April',
+    4: 'Mei',
+    5: 'Juni',
+    6: 'Juli',
+    7: 'Agustus',
+    8: 'September',
+    9: 'Oktober',
+    10: 'November',
+    11: 'Desember',
+  }
+  const Dates = new Date(date)
+  const tanggal = Dates.getDate()
+  const bulan = Dates.getMonth()
+  const tahun = Dates.getFullYear()
+
+  return `${tanggal} ${bulanNumber[bulan]} ${tahun}`
+}

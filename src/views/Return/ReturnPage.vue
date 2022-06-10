@@ -32,6 +32,19 @@
           {{ borrow.Book.title }}
         </p>
       </template>
+      <template v-slot:item.actions="{ item }">
+        <v-btn
+          fab
+          small
+          class="mr-3"
+          color="primary"
+          @click="sendData(item)"
+        >
+          <v-icon>
+            {{ icon.mdiInformation }}
+          </v-icon>
+        </v-btn>
+      </template>
       <template v-slot:footer.prepend>
         <v-row>
           <v-col cols="4" class="mx-4">
@@ -79,19 +92,26 @@
     <add-returns
       v-if="dialog"
       :dialog="dialog"
-      @close="close"
+      @close="closeDialog"
     />
+    <detail-return
+      v-if="detailDialog"
+      :detailDialog="detailDialog"
+      :data="editData"
+      @close="closeDialog"
+    />
+    </v-col>
   </v-container>
 </template>
 <script>
-import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
-import { mdiCloseBox, mdiPlus } from '@mdi/js'
+import {  onMounted, reactive, ref, watch } from '@vue/composition-api'
+import { mdiCloseBox, mdiPlus, mdiInformation } from '@mdi/js'
 import axios from 'axios'
-import QRCode from 'qrcode'
 import AddReturns from './AddReturns.vue'
+import DetailReturn from './DetailReturn.vue'
 
 export default {
-  components: { AddReturns },
+  components: { AddReturns, DetailReturn },
   setup() {
     const headers = ref([
       { text: 'id_transaksi', value: 'id_transaksi' },
@@ -109,24 +129,9 @@ export default {
     const dataPinjam = ref()
     const menuFilter = ref(false)
     const dateFilter = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10))
-    // const onScan = async (decodedText, decodedResult) => {
-    //   trxId.value = decodedText
-    //   const { data } = await axios.get(`borrow/detail/${decodedText}`)
-    //   dataPinjam.value = data
-    //   dialog.value = true
-    // }
-    // watch(trxId,
-    //   async (oldVal, newVal) => {
-    //     try {
-    //       console.log(trxId.value);
-    //       const { data } = await axios.get(`borrow/detail/${trxId.value}`)
-    //       dataPinjam.value = data
-    //       console.log(dataPinjam);
-    //     } catch (error) {
-    //       console.log(error.toString());
-    //     }
-    //   }
-    // )
+    const detailDialog = ref(false)
+    const editData = ref()
+
     const getReturnData = async () => {
       const response = await axios.get('/borrow')
       if (response.data.error) {
@@ -140,15 +145,24 @@ export default {
     onMounted(() => {
       getReturnData()
     })
+
     const onDialog = () => {
       dialog.value = true
     }
-    const close = () => {
+
+    const sendData = (item) => {
+      detailDialog.value = true
+      editData.value = item
+    }
+
+    const closeDialog = () => {
       dialog.value = false
+      detailDialog.value = false
+      getReturnData()
     }
 
     return {
-      icon: { mdiCloseBox, mdiPlus },
+      icon: { mdiCloseBox, mdiPlus, mdiInformation },
       dialog,
       trxId,
       dataPinjam,
@@ -156,9 +170,12 @@ export default {
       headers,
       returns,
       loading,
-      close,
+      closeDialog,
       menuFilter,
       dateFilter,
+      detailDialog,
+      editData,
+      sendData
     }
   },
 }

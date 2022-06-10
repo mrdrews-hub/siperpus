@@ -190,6 +190,15 @@ const routes = [
       layout: 'blank'
     },
   },
+  {
+    path: '/report/return',
+    name: 'report.return',
+    component: () => import('@/views/Report/ReportReturn.vue'),
+    meta: {
+      requiresAuth: true,
+      layout: 'blank'
+    },
+  },
   // {
   //   path: '/report/member',
   //   name: 'report.member',

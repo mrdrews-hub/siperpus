@@ -91,12 +91,13 @@ import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { mdiPencil, mdiDelete, mdiPlus, mdiCamera } from '@mdi/js'
 import axios from 'axios'
 import { Rupiah } from '@/utils'
+import Swal from 'sweetalert2'
 import AddPenalty from '@/views/Pelanggaran/AddPenalty.vue'
 import EditPenalty from '@/views/Pelanggaran/EditPenalty.vue'
 
 export default defineComponent({
   components: { AddPenalty, EditPenalty },
-    setup() {
+  setup() {
     const headers = ref([
       { text: 'Nama', value: 'Member.nama' },
       { text: 'Kelas', value: 'Member.kelas' },
@@ -130,8 +131,36 @@ export default defineComponent({
       editDialog.value = true
     }
 
-    const deletePelanggaran = () => {
-
+    const deletePelanggaran = async (item) => {
+      try {
+        const response = await axios.delete(`/penalties/delete/${item.id}`)
+        if (response.data.error) {
+          alert('Terjadi Kesalahan')
+        } else {
+          const result = await Swal.fire({
+            icon: 'warning',
+            title: 'Are you Sure ?',
+            text: 'Data yang dihapus mungkin tidak dapat dikembalikan',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'crimson',
+          })
+          if (result.isConfirmed) {
+            const { data } = await axios.delete(`/penalties/delete/${item.id}`)
+            if (data.error) {
+              return Swal.fire({
+                icon: 'error',
+                title: 'Oops..',
+                text: 'Terjadi Kesalahan',
+              })
+            }
+            Swal.fire({ toast: true, icon: 'success', title: 'Sukses!', position: 'top-right' })
+            getPelanggaran()
+          }
+        }
+      } catch (error) {
+        console.log(error.toString());
+      }
     }
     const closeDialog = () => {
       editDialog.value = false
@@ -140,19 +169,19 @@ export default defineComponent({
     }
 
     return {
-        icon: { mdiPencil, mdiDelete, mdiPlus, mdiCamera },
-        headers,
-        search,
-        editDialog,
-        tambahDialog,
-        editData,
-        loading,
-        pelanggaran,
-        deletePelanggaran,
-        closeDialog,
-        sendData,
+      icon: { mdiPencil, mdiDelete, mdiPlus, mdiCamera },
+      headers,
+      search,
+      editDialog,
+      tambahDialog,
+      editData,
+      loading,
+      pelanggaran,
+      deletePelanggaran,
+      closeDialog,
+      sendData,
     }
 
-    },
+  },
 })
 </script>

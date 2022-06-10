@@ -9,18 +9,23 @@
       >
         <v-card>
           <v-card-title>
-            <span class="text-h5">Detail Peminjaman</span>
+            <span class="text-h5">Detail Pengembalian</span>
           </v-card-title>
           <v-card-text>
             <v-container>
               <v-form readonly>
               <v-row>
-                <v-col cols="10" class="mb-2">
+                <v-col cols="8" class="mb-2">
                     <v-text-field
                       v-model="form.id_transaksi"
                       label="ID_TRANSASKI"
                     ></v-text-field>
-                    <canvas id="QRCode"></canvas>
+                </v-col>
+                <v-col cols="4" class="mb-2">
+                    <v-text-field
+                      v-model="form.Return.returnAt"
+                      label="Dikembalikan pada"
+                    ></v-text-field>
                 </v-col>
                 <v-col cols="3">
                   <v-text-field
@@ -123,9 +128,7 @@
 </template>
 <script>
 import { defineComponent, onMounted, onUnmounted, ref } from '@vue/composition-api'
-import QRCode from 'qrcode'
 import { Rupiah, selisihHari } from '@/utils'
-import axios from 'axios'
 
 export default {
   props: {
@@ -139,29 +142,10 @@ export default {
     },
   },
   setup(props, ctx) {
-    const transaksi = props.data
-    const form = ref()
+    // const transaksi = props.data
+    const form = props.data
+    console.log(form);
 
-    const getDetails = async () => {
-      try {
-        const response = await axios.get(`borrow/detail/${transaksi.id_transaksi}`)
-        if (response.data.error) {
-          alert('server error')
-        } else {
-          form.value = response.data
-        }
-      } catch (error) {
-        console.log(error.toString())
-      }
-    }
-
-    onMounted(async () => {
-      await getDetails()
-      QRCode.toCanvas(document.getElementById('QRCode'), transaksi.id_transaksi, function(err) {
-        if (err) console.log(err.toString());
-        console.log('QR Mounted');
-      })
-    })
     const close = () => {
       ctx.emit('close')
     }
@@ -173,7 +157,6 @@ export default {
     //     minimumFractionDigits: 0
     //   }).format(money)
     // }
-    
 
     return {
         props,

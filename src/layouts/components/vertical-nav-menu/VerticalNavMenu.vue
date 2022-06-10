@@ -57,11 +57,11 @@
         :to="{ name: 'members' }"
         :icon="icons.mdiAccountGroup"
       ></nav-menu-link>
-      <nav-menu-link
+      <!-- <nav-menu-link
         title="Pelanggaran"
         :to="{ name: 'pelanggaran' }"
         :icon="icons.mdiAlert"
-      ></nav-menu-link>
+      ></nav-menu-link> -->
       <v-list-group
         :value="true"
         :prepend-icon="icons.mdiBookOpen"
@@ -71,25 +71,25 @@
         </template>
         <nav-menu-link
           class="ml-4"
-          title="List Books"
+          title="Katalog Buku"
           :to="{ name: 'books' }"
           :icon="icons.mdiBookCog"
         ></nav-menu-link>
         <nav-menu-link
           class="ml-4"
-          title="Stock"
+          title="Pengadaan Buku"
           :to="{ name: 'stocks' }"
           :icon="icons.mdiBookPlus"
         ></nav-menu-link>
         <nav-menu-link
           class="ml-4"
-          title="Borowing"
+          title="Peminjaman"
           :to="{ name: 'borowing' }"
           :icon="icons.mdiBookClock"
         ></nav-menu-link>
         <nav-menu-link
           class="ml-4"
-          title="Return"
+          title="Pengembalian"
           :to="{ name: 'return' }"
           :icon="icons.mdiBookCheck"
         ></nav-menu-link>
