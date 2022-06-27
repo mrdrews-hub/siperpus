@@ -25,13 +25,13 @@
 Clone the project
 
 ```bash
-  git clone https://www.github.com/mrdrews-hub/skripsi.git
+  git clone https://www.github.com/mrdrews-hub/siperpus.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd skripsi
+  cd siperpus
 ```
 
 Go to server or client branch
