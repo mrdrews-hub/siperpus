@@ -17,7 +17,7 @@
 
 **Client:** VueJS, Materio Dashboard
 
-**Server:** Node, Express
+**Server:** NodeJS, ExpressJS, PostgreSQL
 
 
 ## Run Locally
